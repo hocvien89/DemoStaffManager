@@ -6,7 +6,6 @@
     <footer-component></footer-component>
   </div>
 </template>
-
 <script>
 import {HeaderComponent, NavbarComponent, ContentComponent, FooterComponent} from './components'
 export default {
@@ -21,12 +20,7 @@ export default {
 </script>
 
 <style>
-@import '../node_modules/adminbsb-materialdesign/plugins/bootstrap/css/bootstrap.css';
-@import '../node_modules/adminbsb-materialdesign/plugins/node-waves/waves.css';
-@import '../node_modules/adminbsb-materialdesign/plugins/animate-css/animate.css';
-@import '../node_modules/adminbsb-materialdesign/plugins/morrisjs/morris.css';
-@import '../node_modules/adminbsb-materialdesign/css/themes/all-themes.css';
-@import './assets/css/style.css';
+
 a:hover {
   cursor: pointer;
 }

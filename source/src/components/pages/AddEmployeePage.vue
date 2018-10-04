@@ -1,196 +1,67 @@
 <template>
     <div class="container-fluid">
         <div class="block-header">
-            <h2>BASIC FORM ELEMENTS</h2>
+            <h2>ĐĂNG KÝ THÔNG TIN NHÂN VIÊN</h2>
         </div>
         <!-- Input -->
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>
-                            INPUT
-                            <small>Different sizes and widths</small>
-                        </h2>
-                        <button v-on:click="sendData()">ADD</button>
-                        <ul class="header-dropdown m-r--5">
-                            <li class="dropdown">
-                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <i class="material-icons">more_vert</i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="javascript:void(0);">Action</a></li>
-                                    <li><a href="javascript:void(0);">Another action</a></li>
-                                    <li><a href="javascript:void(0);">Something else here</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="body">
-                        <h2 class="card-inside-title">Staff Name</h2>
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" v-model="input.staff_name" class="form-control" placeholder="Username" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" v-model="input.address" class="form-control" placeholder="Password" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h2 class="card-inside-title">Different Widths</h2>
                         <div class="row clearfix">
                             <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-6" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-6" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-4" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-4" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-4" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-3" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-3" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-3" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="col-sm-3" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h2 class="card-inside-title">Different Sizes</h2>
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
-                                <div class="form-group form-group-lg">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="Large Input" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="Default Input" />
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="Small Input" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h2 class="card-inside-title">Floating Label Examples</h2>
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control">
-                                        <label class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="staff_name">
+                                        <label class="form-label">Họ và tên</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12">
+                            <div class="col-sm-6">
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="password" class="form-control">
-                                        <label class="form-label">Password</label>
+                                        <input type="text" class="form-control" id="address">
+                                        <label class="form-label">Địa chỉ</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12">
-                                <div class="form-group form-float form-group-lg">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" />
-                                        <label class="form-label">Large Input</label>
-                                    </div>
-                                </div>
+                            <div class="col-sm-6">
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" />
-                                        <label class="form-label">Default Input</label>
+                                        <input type="text" class="form-control" id="email">
+                                        <label class="form-label">Email</label>
                                     </div>
                                 </div>
-                                <div class="form-group form-float form-group-sm">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" />
-                                        <label class="form-label">Small Input</label>
+                                        <input type="text" class="form-control" id="phone_number">
+                                        <label class="form-label">Số điện thoại</label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="demo-radio-button">
+                                    <label>Giới tính</label>
+                                    <input name="sex" type="radio" id="sex_1" value="1" checked />
+                                    <label for="sex_1">Nam</label>
+                                    <input name="sex" type="radio" id="sex_2" value="0" />
+                                    <label for="sex_2">Nữ</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <select class="form-control show-tick" id="dev_lang_cd">
+                                    <option value="">-- Ngôn ngữ lập trình --</option>
+                                    <option value="1">C#</option>
+                                    <option value="2">Java</option>
+                                    <option value="3">PHP</option>
+                                    <option value="40">NodeJS</option>
+                                </select>
                             </div>
                         </div>
-
-                        <h2 class="card-inside-title">Input Status</h2>
-                        <div class="row clearfix">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-line focused">
-                                        <input type="text" class="form-control" value="Focused" placeholder="Statu Focused" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-line disabled">
-                                        <input type="text" class="form-control" placeholder="Disabled" disabled />
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="button-demo">
+                            <button type="button" class="btn btn-primary waves-effect" v-on:click="sendData()">Tạo mới</button>
                         </div>
                     </div>
                 </div>
@@ -206,13 +77,29 @@ export default {
   data: function() {
     return {
       input: {
-        staff_name: " ",
-        address: " "
+        staff_name: "",
+        address: "",
+        email: "",
+        "phone_number": "",
+        "sex": "",
+        dev_lang_cd: ""
       }
     }
   },
   methods: {
     sendData() {
+      var staff_name = $('#staff_name').val();
+      var address = $('#address').val();
+      var email = $('#email').val();
+      var phone_number = $('#phone_number').val();
+      var sex = $("input:radio[name ='sex']:checked").val();
+      var dev_lang_cd = $('#dev_lang_cd').val();
+      this.input.staff_name = staff_name;
+      this.input.address = address;
+      this.input.email = email;
+      this.input.phone_number = phone_number;
+      this.input.sex = sex;
+      this.input.dev_lang_cd = dev_lang_cd;
       console.log(this.input);
       axios({
         method: "POST",
@@ -231,5 +118,6 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 </style>

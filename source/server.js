@@ -89,8 +89,12 @@ app.post('/addEmployee', function (req, res, next) {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request()
             .input('staff_name', sql.NVarChar, param.staff_name)
-            .input('address', sql.NVarChar,param.address)
-            .query("Insert into staffs (staff_name, address) OUTPUT INSERTED.staff_cd values(@staff_name, @address) ",param)
+            .input('address', sql.NVarChar, param.address)
+            .input('email', sql.NVarChar, param.email)
+            .input('phone_number', sql.NVarChar, param.phone_number)
+            .input('sex', sql.Int, param.sex)
+            .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
+            .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd) ",param)
         }).then(result => {
 
             res.send(result.recordset);

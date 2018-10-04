@@ -16,7 +16,9 @@
   "dependencies": {
     "adminbsb-materialdesign": "^1.0.5",
     "axios": "^0.18.0",
+    "jquery": "^2.2.4",
     "mssql": "^4.2.1",
+    "node-waves": "^0.7.6",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
