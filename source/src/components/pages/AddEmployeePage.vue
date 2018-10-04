@@ -12,6 +12,7 @@
                             INPUT
                             <small>Different sizes and widths</small>
                         </h2>
+                        <button v-on:click="sendData()">ADD</button>
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -26,17 +27,17 @@
                         </ul>
                     </div>
                     <div class="body">
-                        <h2 class="card-inside-title">Basic Examples</h2>
+                        <h2 class="card-inside-title">Staff Name</h2>
                         <div class="row clearfix">
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="Username" />
+                                        <input type="text" v-model="input.staff_name" class="form-control" placeholder="Username" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="password" class="form-control" placeholder="Password" />
+                                        <input type="text" v-model="input.address" class="form-control" placeholder="Password" />
                                     </div>
                                 </div>
                             </div>
@@ -199,8 +200,36 @@
     </div>
 </template>
 <script>
+/* eslint-disable */
+import axios from "axios";
 export default {
-}
+  data: function() {
+    return {
+      input: {
+        staff_name: " ",
+        address: " "
+      }
+    }
+  },
+  methods: {
+    sendData() {
+      console.log(this.input);
+      axios({
+        method: "POST",
+        url: "http://localhost:8085/addEmployee",
+        data: this.input,
+        headers: { "content-type": "application/json" }
+      }).then(
+        result => {
+          console.log(this.input);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
+  }
+};
 </script>
 <style scoped>
 </style>
