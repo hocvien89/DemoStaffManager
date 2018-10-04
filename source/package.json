@@ -16,6 +16,7 @@
   "dependencies": {
     "adminbsb-materialdesign": "^1.0.5",
     "axios": "^0.18.0",
+    "chart.js": "^2.7.2",
     "mssql": "^4.2.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
