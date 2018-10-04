@@ -76,16 +76,16 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Task E</td>
+                                        <tr v-for="(data, index) in myData" :key="index">
+                                            <td>{{index + 5}}</td>
+                                            <td>{{data.task}}</td>
                                             <td>
-                                                <span class="label bg-red">Suspended</span>
+                                                <span class="label bg-red">{{data.status}}</span>
                                             </td>
-                                            <td>John Doe</td>
+                                            <td>{{data.name}}</td>
                                             <td>
                                                 <div class="progress">
-                                                    <div class="progress-bar bg-red" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%"></div>
+                                                    <div class="progress-bar bg-red" role="progressbar" :aria-valuenow="data.progress" aria-valuemin="0" aria-valuemax="100" :style="'width:' + data.progress +'%'"></div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -97,10 +97,76 @@
                 </div>
                 <!-- #END# Task Info -->
             </div>
+            <div class="row clearfix">
+              <table>
+                <thead>
+                  <tr>
+                    <th @click="sort('name')">Name</th>
+                    <th @click="sort('age')">Age</th>
+                    <th @click="sort('breed')">Breed</th>
+                    <th @click="sort('gender')">Gender</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(cat, index) in myData" :key="index">
+                    <td>{{cat.name}}</td>
+                    <td>{{cat.age}}</td>
+                    <td>{{cat.breed}}</td>
+                    <td>{{cat.gender}}</td>
+                  </tr>
+                </tbody>
+            </table>
+            <paginator :totalPage="totalPages" :currentPage="currentPage" :pageRange="pageSize" @btnClick="loadPage"></paginator>
+          </div>
     </div>
 </template>
 <script>
+import Paginator from './table/Paginator'
+
 export default {
+  data () {
+    return {
+      myData: [],
+      currentSort: 'name',
+      currentSortDir: 'asc',
+      pageSize: 5,
+      currentPage: 1
+    }
+  },
+  components: {
+    Paginator
+  },
+  created: function () {
+  },
+  methods: {
+    sort: function (s) {
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc'
+      }
+      this.currentSort = s
+    },
+    loadPage: function (selected, data) {
+      this.currentPage = selected
+    }
+  },
+  computed: {
+    myData: function () {
+      return this.myData.slice().sort((a, b) => {
+        let modifier = 1
+        if (this.currentSortDir === 'desc') modifier = -1
+        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier
+        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier
+        return 0
+      }).filter((row, index) => {
+        let start = (this.currentPage - 1) * this.pageSize
+        let end = this.currentPage * this.pageSize
+        if (index >= start && index < end) return true
+      })
+    },
+    totalPages: function () {
+      return Math.ceil(this.myData.length / this.pageSize)
+    }
+  }
 }
 </script>
 <style scoped>
