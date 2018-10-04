@@ -6,6 +6,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>TASK INFOS</h2>
+                            <button v-on:click="getEmploy()">Employee</button>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -100,7 +101,28 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
+  data: function () {
+    return {
+      searchBarClass: ''
+    }
+  },
+  methods: {
+    getEmploy () {
+      axios({
+        method: 'GET',
+        url: 'http://localhost:8085/getDevLanguage'
+      }).then(
+        result => {
+          console.log(result)
+        },
+        error => {
+          console.error(error)
+        }
+      )
+    }
+  }
 }
 </script>
 <style scoped>
