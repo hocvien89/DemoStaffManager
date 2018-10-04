@@ -5,8 +5,8 @@
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                     <div class="card">
                         <div class="header">
-                            <h2>TASK INFOS</h2>
-                            <button v-on:click="getEmploy()">Employee</button>
+                            <h2>Staff List</h2>
+                            <!-- <button v-on:click="getEmploy()">Employee</button> -->
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -25,99 +25,29 @@
                                 <table class="table table-hover dashboard-task-infos">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Task</th>
-                                            <th>Status</th>
-                                            <th>Manager</th>
-                                            <th>Progress</th>
+                                            <th>No.</th>
+                                            <th @click="sort('staff_name')">Name</th>
+                                            <th @click="sort('dev_lang_cd')">Coding Languages</th>
+                                            <th @click="sort('email')">Email</th>
+                                            <th @click="sort('address')">Address</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Task A</td>
-                                            <td><span class="label bg-green">Doing</span></td>
-                                            <td>John Doe</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-green" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: 62%"></div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Task B</td>
-                                            <td><span class="label bg-blue">To Do</span></td>
-                                            <td>John Doe</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-blue" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Task C</td>
-                                            <td><span class="label bg-light-blue">On Hold</span></td>
-                                            <td>John Doe</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-light-blue" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%"></div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Task D</td>
-                                            <td><span class="label bg-orange">Wait Approvel</span></td>
-                                            <td>John Doe</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-orange" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%"></div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr v-for="(data, index) in myData" :key="index">
-                                            <td>{{index + 5}}</td>
-                                            <td>{{data.task}}</td>
-                                            <td>
-                                                <span class="label bg-red">{{data.status}}</span>
-                                            </td>
-                                            <td>{{data.name}}</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-red" role="progressbar" :aria-valuenow="data.progress" aria-valuemin="0" aria-valuemax="100" :style="'width:' + data.progress +'%'"></div>
-                                                </div>
-                                            </td>
+                                        <tr v-for="(data, index) in displayData" :key="index">
+                                            <td>{{index + 1}}</td>
+                                            <td>{{data.staff_name}}</td>
+                                            <td>{{data.dev_lang_cd}}</td>
+                                            <td>{{data.email}}</td>
+                                            <td>{{data.address}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <paginator :totalPage="totalPages" :currentPage="currentPage" :pageRange="pageSize" @btnClick="loadPage"></paginator>
                         </div>
-                    </div>
-                </div>
+                  </div>
                 <!-- #END# Task Info -->
             </div>
-            <div class="row clearfix">
-              <table>
-                <thead>
-                  <tr>
-                    <th @click="sort('name')">Name</th>
-                    <th @click="sort('age')">Age</th>
-                    <th @click="sort('breed')">Breed</th>
-                    <th @click="sort('gender')">Gender</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(cat, index) in myData" :key="index">
-                    <td>{{cat.name}}</td>
-                    <td>{{cat.age}}</td>
-                    <td>{{cat.breed}}</td>
-                    <td>{{cat.gender}}</td>
-                  </tr>
-                </tbody>
-            </table>
-            <paginator :totalPage="totalPages" :currentPage="currentPage" :pageRange="pageSize" @btnClick="loadPage"></paginator>
           </div>
     </div>
 </template>
@@ -128,9 +58,9 @@ export default {
   data () {
     return {
       myData: [],
-      currentSort: 'name',
+      currentSort: 'staff_name',
       currentSortDir: 'asc',
-      pageSize: 5,
+      pageSize: 3,
       currentPage: 1
     }
   },
@@ -138,6 +68,7 @@ export default {
     Paginator
   },
   created: function () {
+    this.getEmploy()
   },
   methods: {
     sort: function (s) {
@@ -152,9 +83,10 @@ export default {
     getEmploy () {
       axios({
         method: 'GET',
-        url: 'http://localhost:8085/getDevLanguage'
+        url: 'http://localhost:8085/getEmployeeList'
       }).then(
         result => {
+          this.myData = result.data
           console.log(result)
         },
         error => {
@@ -164,17 +96,25 @@ export default {
     }
   },
   computed: {
-    myData: function () {
+    displayData: function () {
       return this.myData.slice().sort((a, b) => {
         let modifier = 1
-        if (this.currentSortDir === 'desc') modifier = -1
-        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier
-        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier
+        if (this.currentSortDir === 'desc') {
+          modifier = -1
+        }
+        if (a[this.currentSort] < b[this.currentSort]) {
+          return -1 * modifier
+        }
+        if (a[this.currentSort] > b[this.currentSort]) {
+          return 1 * modifier
+        }
         return 0
       }).filter((row, index) => {
         let start = (this.currentPage - 1) * this.pageSize
         let end = this.currentPage * this.pageSize
-        if (index >= start && index < end) return true
+        if (index >= start && index < end) {
+          return true
+        }
       })
     },
     totalPages: function () {
@@ -184,4 +124,7 @@ export default {
 }
 </script>
 <style scoped>
+.dashboard-task-infos {
+  height: 100px;
+}
 </style>
