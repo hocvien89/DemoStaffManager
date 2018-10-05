@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import ReportPage from '@/components/pages/ReportPage'
+import HomePage from '@/components/pages/HomePage'
 import AddEmployeePage from '@/components/pages/AddEmployeePage'
 import ViewEmployeePage from '@/components/pages/ViewEmployeePage'
 import EditStaff from '@/components/pages/EditStaff'
+import ViewReportYear from '@/components/pages/ReportYear'
 
 Vue.use(Router)
 
@@ -11,8 +12,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'ReportPage',
-      component: ReportPage
+      name: 'HomePage',
+      component: HomePage
     },
     {
       path: '/add-employee',
@@ -28,6 +29,11 @@ export default new Router({
       path: '/edit-staff/:id',
       name: 'EditStaff',
       component: EditStaff
+    },
+    {
+      path: '/view-report-year',
+      name: 'ViewReportYear',
+      component: ViewReportYear
     }
   ]
 })

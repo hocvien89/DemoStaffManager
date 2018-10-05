@@ -138,6 +138,23 @@ app.post('/editEmployee', function (req, res, next) {
     res.status(200).send({ success: true, message: 'Thành công', data: param });
 })
 
+app.get('/countDevByTime', async function (req, res) {
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().query('SELECT YEAR(start_date) as startYear,COUNT(*) as total FROM staffs GROUP BY YEAR(start_date)');
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+})
+
 var server = app.listen(8085, function () {
 
     var host = server.address().address
