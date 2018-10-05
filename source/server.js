@@ -172,6 +172,26 @@ app.get('/countDevByLanguage', async function (req, res) {
     });
 })
 
+app.post('/deleteEmployee', function (req, res, next) {
+    var param = req.body;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+            .input('staff_cd', sql.NVarChar, param.staff_cd)
+            .query("DELETE staffs WHERE staff_cd = @staff_cd",param)
+        }).then(result => {
+            res.status(200).send({ success: true, message: 'delete employee success', data: param });
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+    
+})
+
 var server = app.listen(8085, function () {
 
     var host = server.address().address
