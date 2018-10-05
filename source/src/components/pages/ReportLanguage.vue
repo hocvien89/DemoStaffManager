@@ -1,5 +1,8 @@
 <template>
     <div id="app">
+        <div class="block-header">
+            <h2>REPORT EMPLOYEE BY LANGUAGE</h2>
+        </div>
         <div id="content">
             <canvas ref="chart"></canvas>
         </div>

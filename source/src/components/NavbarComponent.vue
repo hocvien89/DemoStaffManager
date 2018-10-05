@@ -32,13 +32,13 @@
                         <li class="header">REPORT</li>
                         <li id="overview" :class="{'active':isActive == 'overview'}" @click="setActive">
                             <router-link to="/">
-                                <i class="material-icons col-red">donut_large</i>
-                                <span>Overview</span>
+                                <i class="material-icons col-red">home</i>
+                                <span>Home</span>
                             </router-link>
                         </li>
                         <li>
                           <a class="menu-toggle" @click="toggleMenu">
-                              <i class="material-icons">group</i>
+                              <i class="material-icons">report</i>
                               <span>Daily Reports</span>
                           </a>
                           <ul class="ml-menu" id="daily-report-menu" :style="{'display':isExpand.indexOf('daily-report-menu') > -1 ? 'block' : 'none'}">
@@ -58,13 +58,13 @@
                           </a>
                           <ul class="ml-menu" id="employee-menu" :style="{'display':isExpand.indexOf('employee-menu') > -1 ? 'block' : 'none'}">
                             <li id="edit-staff" :class="{'active':isActive == 'edit-staff'}" @click="setActive">
-                                <router-link class="toggled" :to="{ name: 'EditStaff', params: { id: 4}}">Edit Staff</router-link>
+                                <router-link class="toggled" :to="{ name: 'EditStaff', params: { id: 4}}">Edit Employee</router-link>
                             </li>
                             <li id="add-employee" :class="{'active':isActive == 'add-employee'}" @click="setActive">
                                 <router-link class="toggled" to="/add-employee">Add Employee</router-link>
                             </li>
                             <li id="view-list" :class="{'active':isActive == 'view-list'}" @click="setActive">
-                                <router-link class="toggled" to="/view-employee">View List</router-link>
+                                <router-link class="toggled" to="/view-employee">Employee List</router-link>
                             </li>
                           </ul>
                         </li>
@@ -74,7 +74,7 @@
                 <!-- Footer -->
                 <div class="legal">
                     <div class="copyright">
-                        &copy; 2018 <a @click.stop>Staff Management</a>.
+                        &copy; 2018 <a @click.stop>Rikkeisoft.vn-EmployeeManager</a>.
                     </div>
                     <div class="version">
                         <b>Version: </b> 1.0

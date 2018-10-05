@@ -155,6 +155,23 @@ app.get('/countDevByTime', async function (req, res) {
     });
 })
 
+app.get('/countDevByLanguage', async function (req, res) {
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().query('SELECT dv.dev_language,COUNT(*) as total FROM dev_language dv LEFT JOIN staffs s ON dv.dev_lang_cd = s.dev_lang_cd GROUP BY dv.dev_lang_cd,dv.dev_language')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+})
+
 var server = app.listen(8085, function () {
 
     var host = server.address().address
