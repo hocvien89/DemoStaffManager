@@ -57,6 +57,9 @@
                               <span>Employees</span>
                           </a>
                           <ul class="ml-menu" id="employee-menu" :style="{'display':isExpand.indexOf('employee-menu') > -1 ? 'block' : 'none'}">
+                            <li id="edit-staff" :class="{'active':isActive == 'edit-staff'}" @click="setActive">
+                                <router-link class="toggled" :to="{ name: 'EditStaff', params: { id: 4}}">Edit Staff</router-link>
+                            </li>
                             <li id="add-employee" :class="{'active':isActive == 'add-employee'}" @click="setActive">
                                 <router-link class="toggled" to="/add-employee">Add Employee</router-link>
                             </li>

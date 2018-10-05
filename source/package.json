@@ -20,6 +20,7 @@
     "mssql": "^4.2.1",
     "node-waves": "^0.7.6",
     "vue": "^2.5.2",
+    "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
