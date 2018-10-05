@@ -2,6 +2,7 @@
     <ul v-if="totalPage > 1 && totalPage < 8" class="pagination">
         <li v-if="withNextPrev" :class="disablePrev">
             <a @click="!disablePrev ? btnPrev() : ''">
+                <i v-if="!prevText" class="material-icons">keyboard_arrow_left</i>
                 {{ prevText }}
             </a>
         </li>
@@ -10,6 +11,7 @@
         </li>
         <li v-if="withNextPrev" :class="disableNext">
             <a @click="!disableNext ? btnNext() : ''">
+                <i v-if="!nextText" class="material-icons">keyboard_arrow_right</i>
                 {{ nextText }}
             </a>
         </li>
@@ -18,6 +20,7 @@
     <ul v-else-if="totalPage >= 8" class="pagination">
         <li v-if="withNextPrev" :class="disablePrev">
             <a @click="!disablePrev ? btnPrev() : ''">
+                <i v-if="!prevText" class="material-icons">keyboard_arrow_left</i>
                 {{ prevText }}
             </a>
         </li>
@@ -27,6 +30,7 @@
         </li>
         <li v-if="withNextPrev" :class="disableNext">
             <a @click="!disableNext ? btnNext() : ''">
+                <i v-if="!nextText" class="material-icons">keyboard_arrow_right</i>
                 {{ nextText }}
             </a>
         </li>
@@ -57,11 +61,11 @@ export default {
     },
     nextText: {
       type: String,
-      default: '>'
+      default: ''
     },
     prevText: {
       type: String,
-      default: '<'
+      default: ''
     },
     activeBGColor: {
       type: String
@@ -81,7 +85,6 @@ export default {
   },
   mounted () {
     this.disablePrevNext()
-    console.log(this.customActiveBGColor)
   },
   computed: {
     pages: function () {
@@ -223,8 +226,10 @@ export default {
   }
 
   .active.danger a{
-    background: #DC3545;
-    border-color: #DC3545;
+    /* background: #DC3545;
+    border-color: #DC3545; */
+    background: #F44336;
+    border-color: #F44336;
   }
 
   .active.warning a{
