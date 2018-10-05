@@ -27,11 +27,11 @@ export default {
         var chart = this.$refs.chart;
             var ctx = chart.getContext("2d");
             var myChart = new Chart(ctx, {
-                type: 'doughnut',
+                type: 'bar',
                 data: {
                     labels: langname,
                     datasets: [{
-                        label: '# of Votes',
+                        label: 'total number of employees',
                         data: dataEm,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
