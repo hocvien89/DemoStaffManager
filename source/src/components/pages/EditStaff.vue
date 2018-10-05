@@ -84,7 +84,14 @@
                             <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" id="txtLang" class="form-control" placeholder="Enter program language" v-model="input.dev_lang_cd">
+                                        <select class="form-control show-tick" id="dev_lang_cd" v-model="input.dev_lang_cd" required>
+                                        <option value="0">-- Select program language --</option>
+                                        <option value="1">C#</option>
+                                        <option value="2">Java</option>
+                                        <option value="3">PHP</option>
+                                        <option value="40">NodeJS</option>
+                                    </select>
+                                        <!-- <input type="text" id="txtLang" class="form-control" placeholder="Enter program language" v-model="input.dev_lang_cd"> -->
                                     </div>
                                 </div>
                             </div>
@@ -160,8 +167,10 @@ export default {
       })
       .then(response => {
         this.input = response.data[0];
-        this.input.start_date =  moment(this.input.start_date).format('YYYY-MM-DD');
-        this.input.end_date =  moment(this.input.end_date).format('YYYY-MM-DD');
+        this.input.start_date = moment(this.input.start_date).format(
+          "YYYY-MM-DD"
+        );
+        this.input.end_date = moment(this.input.end_date).format("YYYY-MM-DD");
       })
       .catch(error => {
         console.log(error);
@@ -172,8 +181,7 @@ export default {
   },
   methods: {
     Save() {
-      console.log('Save');
-      console.log(this.input);
+      console.log("Save");
       axios({
         method: "POST",
         url: "http://localhost:8085/editEmployee",

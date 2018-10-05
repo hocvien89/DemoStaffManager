@@ -9,6 +9,7 @@ import '../node_modules/adminbsb-materialdesign/plugins/node-waves/waves.css'
 import '../node_modules/adminbsb-materialdesign/plugins/animate-css/animate.css'
 import '../node_modules/adminbsb-materialdesign/plugins/morrisjs/morris.css'
 import '../node_modules/adminbsb-materialdesign/css/themes/all-themes.css'
+import '../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.css'
 import './assets/css/style.css'
 
 import '../node_modules/jquery/src/jquery.js'
@@ -19,7 +20,7 @@ import '../node_modules/adminbsb-materialdesign/plugins/jquery-slimscroll/jquery
 import '../node_modules/adminbsb-materialdesign/plugins/node-waves/waves.js'
 import '../node_modules/adminbsb-materialdesign/plugins/autosize/autosize.js'
 import '../node_modules/adminbsb-materialdesign/js/admin.js'
-// import '../node_modules/adminbsb-materialdesign/js/pages/forms/basic-form-elements.js'
+import '../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js'
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
