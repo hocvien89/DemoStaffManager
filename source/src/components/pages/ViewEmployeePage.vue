@@ -59,105 +59,124 @@
     </div>
 </template>
 <script>
-import Paginator from './table/Paginator'
-import axios from 'axios'
-import '../../../node_modules/adminbsb-materialdesign/plugins/bootstrap-select/js/bootstrap-select.js'
-import '../../../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js'
+/* eslint-disable */
+import Paginator from "./table/Paginator";
+import axios from "axios";
+import "../../../node_modules/adminbsb-materialdesign/plugins/bootstrap-select/js/bootstrap-select.js";
+import "../../../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js";
 
 export default {
-  data () {
+  data() {
     return {
-      searchQuery: '',
+      searchQuery: "",
       myData: [],
-      currentSort: 'staff_name',
-      currentSortDir: 'asc',
+      currentSort: "staff_name",
+      currentSortDir: "asc",
       pageSize: 10,
       pageSizeList: [5, 10, 25, 50, 100],
       currentPage: 1
-    }
+    };
   },
   components: {
     Paginator
   },
-  created: function () {
-    this.getEmploy()
+  created: function() {
+    this.getEmploy();
   },
   methods: {
-    sort: function (s) {
+    sort: function(s) {
       if (s === this.currentSort) {
-        this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc'
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       }
-      this.currentSort = s
-      var children = [].slice.call(event.target.closest('tr').children)
+      this.currentSort = s;
+      var children = [].slice.call(event.target.closest("tr").children);
       children.forEach(element => {
-        element.className = 'sorting'
-      })
-      event.target.className = 'sorting_' + this.currentSortDir
+        element.className = "sorting";
+      });
+      event.target.className = "sorting_" + this.currentSortDir;
     },
-    loadPage: function (selected, data) {
-      this.currentPage = selected
+    loadPage: function(selected, data) {
+      this.currentPage = selected;
     },
-    getEmploy: function () {
+    getEmploy: function() {
       axios({
-        method: 'GET',
-        url: 'http://localhost:8085/getEmployeeList'
+        method: "GET",
+        url: process.env.BASE_URL + "getEmployeeList"
       }).then(
         result => {
-          this.myData = result.data
+          this.myData = result.data;
         },
         error => {
-          console.error(error)
+          console.error(error);
         }
-      )
+      );
     },
-    deleteStaff: function (data) {
-    }
+    deleteStaff: function(data) {}
   },
   computed: {
-    displayData: function () {
-      return this.myData.slice().sort((a, b) => {
-        let modifier = 1
-        if (this.currentSortDir === 'desc') {
-          modifier = -1
-        }
-        if (a[this.currentSort] < b[this.currentSort]) {
-          return -1 * modifier
-        }
-        if (a[this.currentSort] > b[this.currentSort]) {
-          return 1 * modifier
-        }
-        return 0
-      }).filter((row, index) => {
-        if (!this.searchQuery) {
-          return true
-        }
-        if (this.searchQuery) {
-          var lowerSearch = this.searchQuery.toLowerCase()
-          if ((row.staff_name && row.staff_name.toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.dev_lang_cd && row.dev_lang_cd.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.email && row.email.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.address && row.address.toString().toLowerCase().indexOf(lowerSearch) > -1)) {
-            return true
+    displayData: function() {
+      return this.myData
+        .slice()
+        .sort((a, b) => {
+          let modifier = 1;
+          if (this.currentSortDir === "desc") {
+            modifier = -1;
           }
-        }
-      }).filter((row, index) => {
-        let start = (this.currentPage - 1) * this.pageSize
-        let end = this.currentPage * this.pageSize
-        if (index >= start && index < end) {
-          return true
-        }
-      })
+          if (a[this.currentSort] < b[this.currentSort]) {
+            return -1 * modifier;
+          }
+          if (a[this.currentSort] > b[this.currentSort]) {
+            return 1 * modifier;
+          }
+          return 0;
+        })
+        .filter((row, index) => {
+          if (!this.searchQuery) {
+            return true;
+          }
+          if (this.searchQuery) {
+            var lowerSearch = this.searchQuery.toLowerCase();
+            if (
+              (row.staff_name &&
+                row.staff_name.toLowerCase().indexOf(lowerSearch) > -1) ||
+              (row.dev_lang_cd &&
+                row.dev_lang_cd
+                  .toString()
+                  .toLowerCase()
+                  .indexOf(lowerSearch) > -1) ||
+              (row.email &&
+                row.email
+                  .toString()
+                  .toLowerCase()
+                  .indexOf(lowerSearch) > -1) ||
+              (row.address &&
+                row.address
+                  .toString()
+                  .toLowerCase()
+                  .indexOf(lowerSearch) > -1)
+            ) {
+              return true;
+            }
+          }
+        })
+        .filter((row, index) => {
+          let start = (this.currentPage - 1) * this.pageSize;
+          let end = this.currentPage * this.pageSize;
+          if (index >= start && index < end) {
+            return true;
+          }
+        });
     },
-    totalPages: function () {
-      return Math.ceil(this.myData.length / this.pageSize)
+    totalPages: function() {
+      return Math.ceil(this.myData.length / this.pageSize);
     }
   }
-}
+};
 </script>
 <style scoped>
-@import '../../../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css';
-@import '../../../node_modules/adminbsb-materialdesign/plugins/bootstrap-select/css/bootstrap-select.css';
-@import '../../../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.css';
+@import "../../../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css";
+@import "../../../node_modules/adminbsb-materialdesign/plugins/bootstrap-select/css/bootstrap-select.css";
+@import "../../../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.css";
 
 .material-icons.detele {
   cursor: pointer;

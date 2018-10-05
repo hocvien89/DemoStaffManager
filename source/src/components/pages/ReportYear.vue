@@ -17,7 +17,7 @@ export default {
   mounted() {
     axios({
       method: 'GET',
-      url: 'http://localhost:8085/countDevByTime'
+      url: process.env.BASE_URL +'countDevByTime'
     }).then(
       result => {
         var size = result.data.length;

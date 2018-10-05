@@ -105,7 +105,7 @@ export default {
       this.input.dev_lang_cd = dev_lang_cd;
       axios({
         method: "POST",
-        url: "http://localhost:8085/addEmployee",
+        url: process.env.BASE_URL +"haddEmployee",
         data: this.input,
         headers: { "content-type": "application/json" }
       }).then(

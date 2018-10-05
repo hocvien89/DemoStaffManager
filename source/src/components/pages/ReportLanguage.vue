@@ -17,7 +17,7 @@ export default {
   mounted() {
     axios({
       method: 'GET',
-      url: 'http://localhost:8085/countDevByLanguage'
+      url: process.env.BASE_URL + 'countDevByLanguage'
     }).then(
       result => {
         var size = result.data.length;
