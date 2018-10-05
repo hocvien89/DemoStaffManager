@@ -9,28 +9,21 @@
                         </div>
                         <div class="body">
                             <div class="row">
-                              <div class="col-sm-4 col-md-2 col-xs-12">
+                              <div class="col-sm-10">
                                 <div class="form-group">
-                                  <label>Page size:</label>
-                                  <select class="bootstrap-select form-control show-tick" v-model="pageSize">
-                                    <option v-for="(val, index) in pageSizeList" :key="index" :value="val">{{val}}<span class="bs-caret"><span class="caret"></span></span></option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="col-sm-8 col-md-6 col-xs-12" style="float: right;">
-                                <div class="form-group">
-                                  <label>Search:</label>
                                   <div class="form-line">
-                                      <input type="text" v-model="searchQuery" class="form-control" placeholder="Type to search..." />
+                                    <input type="text" v-model="searchQuery" class="form-control" placeholder="Type to search..." />
                                   </div>
                                 </div>
+                              </div>
+                              <div class="col-sm-2" style="float: right;">
+                                <router-link to="/add-employee"><button type="button" class="btn btn-success waves-effect">Add new</button></router-link>
                               </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                     <thead>
                                         <tr>
-                                            <th>No.</th>
                                             <th class="sorting_asc" @click="sort('staff_name')">Name</th>
                                             <th class="sorting" @click="sort('dev_lang_cd')">Coding Languages</th>
                                             <th class="sorting" @click="sort('email')">Email</th>
@@ -39,27 +32,49 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(data, index) in displayData" :key="index">
-                                            <td>{{index + 1}}</td>
+                                        <tr v-for="(data, index) in pagingData" :key="index">
                                             <td>{{data.staff_name}}</td>
                                             <td>{{data.dev_lang_cd}}</td>
                                             <td>{{data.email}}</td>
                                             <td>{{data.address}}</td>
-                                            <td><i data-type="confirm" class="waves-effect material-icons detele" @click="deleteStaff(data)">delete</i></td>
+                                            <td><router-link class="edit-button" :to="{name:'EditStaff', params: {id: data.staff_cd}}"><i class="material-icons">mode_edit</i></router-link><i data-type="confirm" class="waves-effect material-icons detele" @click="showModal(data)">delete</i></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <paginator :totalPage="totalPages" :activeBGColor="'danger'" :currentPage="currentPage" :pageRange="pageSize" @btnClick="loadPage"></paginator>
+                            <div class="row">
+                              <div class="col-sm-3" style="margin-top: 25px;">
+                                Showing page {{currentPage}} of {{totalPages}}
+                              </div>
+                              <div class="col-sm-9 row">
+                                <div class="col-sm-9" style="text-align: right;">
+                                  <paginator :totalPage="totalPages" :activeBGColor="'danger'" :currentPage="currentPage" :pageRange="pageSize" @btnClick="loadPage"></paginator>
+                                </div>
+                                <div class="col-sm-3 form-inline" style="margin-top: 20px;">
+                                  <div class="form-group">
+                                    <span for="page-size">Page size:</span>
+                                    <select id="page-size" class="bootstrap-select form-control show-tick" v-model="pageSize">
+                                      <option v-for="(val, index) in pageSizeList" :key="index" :value="val">{{val}}<span class="bs-caret"><span class="caret"></span></span></option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         </div>
                   </div>
                 <!-- #END# Task Info -->
             </div>
           </div>
+          <modal v-show="isModalVisible" @accept="deleteStaff" @close="closeModal">
+            <div slot="body" style="margin-left: 10px;">
+              Do you want to delete staff "{{delStaff.staff_name}}"?
+            </div>
+          </modal>
     </div>
 </template>
 <script>
 import Paginator from './table/Paginator'
+import Modal from '../common/Modal.vue'
 import axios from 'axios'
 import '../../../node_modules/adminbsb-materialdesign/plugins/bootstrap-select/js/bootstrap-select.js'
 import '../../../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js'
@@ -73,11 +88,14 @@ export default {
       currentSortDir: 'asc',
       pageSize: 10,
       pageSizeList: [5, 10, 25, 50, 100],
-      currentPage: 1
+      currentPage: 1,
+      delStaff: [],
+      isModalVisible: false
     }
   },
   components: {
-    Paginator
+    Paginator,
+    Modal
   },
   created: function () {
     this.getEmploy()
@@ -110,7 +128,23 @@ export default {
         }
       )
     },
-    deleteStaff: function (data) {
+    deleteStaff: function () {
+      axios({
+        method: 'POST',
+        url: 'http://localhost:8085/deleteEmployee',
+        data: {'id': this.deleteStaff.staff_cd}
+      }).then((response) => {
+        this.myData.splice(this.myData.indexOf(data), 1)
+      }).catch(e => {
+        console.log(e)
+      })
+    },
+    showModal: function (data) {
+      this.delStaff = data
+      this.isModalVisible = true
+    },
+    closeModal: function () {
+      this.isModalVisible = false
     }
   },
   computed: {
@@ -140,7 +174,10 @@ export default {
             return true
           }
         }
-      }).filter((row, index) => {
+      })
+    },
+    pagingData: function () {
+      return this.displayData.filter((row, index) => {
         let start = (this.currentPage - 1) * this.pageSize
         let end = this.currentPage * this.pageSize
         if (index >= start && index < end) {
@@ -149,7 +186,7 @@ export default {
       })
     },
     totalPages: function () {
-      return Math.ceil(this.myData.length / this.pageSize)
+      return Math.ceil(this.displayData.length / this.pageSize)
     }
   }
 }
@@ -161,5 +198,15 @@ export default {
 
 .material-icons.detele {
   cursor: pointer;
+}
+.edit-button {
+  color: #555;
+  margin-right: 10px;
+}
+.btn-success {
+  background-color: #F44336!important;
+}
+.bootstrap-select.form-control.show-tick {
+  width: auto!important;
 }
 </style>
