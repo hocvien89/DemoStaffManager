@@ -46,7 +46,7 @@
                                 <router-link class="toggled" to="/">Report 1</router-link>
                             </li>
                             <li id="report2" :class="{'active':isActive == 'report2'}" @click="setActive">
-                                <router-link class="toggled" to="/">Report 2</router-link>
+                                <router-link class="toggled" to="/report-staff-by-time">Report Staff By Time</router-link>
                             </li>
                           </ul>
                         </li>

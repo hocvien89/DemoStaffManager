@@ -4,6 +4,7 @@ import ReportPage from '@/components/pages/ReportPage'
 import AddEmployeePage from '@/components/pages/AddEmployeePage'
 import ViewEmployeePage from '@/components/pages/ViewEmployeePage'
 import ViewReportLanguage from '@/components/pages/ReportLanguage'
+import ReportStaffByTime from '@/components/pages/ReportStaffByTime'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/view-report-language',
       name: 'ViewReportLanguage',
       component: ViewReportLanguage
+    },
+    {
+      path: '/report-staff-by-time',
+      name: 'ReportStaffByTime',
+      component: ReportStaffByTime
     }
   ]
 })

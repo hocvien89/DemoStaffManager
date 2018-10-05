@@ -122,6 +122,23 @@ app.get('/countDevByLanguage', async function (req, res) {
     });
 })
 
+app.get('/countStaffByTime', async function (req, res) {
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().query('select datepart(yyyy, start_date) as years, count (staff_cd) as counts from staffs group by datepart(yyyy, start_date)')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+})
+
 var server = app.listen(8085, function () {
 
     var host = server.address().address
