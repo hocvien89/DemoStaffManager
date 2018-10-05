@@ -8,61 +8,63 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <div class="row clearfix">
-                            <div class="col-sm-6">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" id="staff_name">
-                                        <label class="form-label">Họ và tên</label>
+                        <form id="form_validation">
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="staff_name" required>
+                                            <label class="form-label">Họ và tên</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" id="address">
-                                        <label class="form-label">Địa chỉ</label>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="address" required>
+                                            <label class="form-label">Địa chỉ</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" id="email">
-                                        <label class="form-label">Email</label>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="email" required>
+                                            <label class="form-label">Email</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" id="phone_number">
-                                        <label class="form-label">Số điện thoại</label>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="phone_number" required>
+                                            <label class="form-label">Số điện thoại</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="demo-radio-button">
-                                    <label>Giới tính</label>
-                                    <input name="sex" type="radio" id="sex_1" value="1" checked />
-                                    <label for="sex_1">Nam</label>
-                                    <input name="sex" type="radio" id="sex_2" value="0" />
-                                    <label for="sex_2">Nữ</label>
+                                <div class="col-sm-6">
+                                    <div class="demo-radio-button">
+                                        <label>Giới tính</label>
+                                        <input name="sex" type="radio" id="sex_1" value="1" checked />
+                                        <label for="sex_1">Nam</label>
+                                        <input name="sex" type="radio" id="sex_2" value="0" />
+                                        <label for="sex_2">Nữ</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control show-tick" id="dev_lang_cd" required>
+                                        <option value="">-- Ngôn ngữ lập trình --</option>
+                                        <option value="1">C#</option>
+                                        <option value="2">Java</option>
+                                        <option value="3">PHP</option>
+                                        <option value="40">NodeJS</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <select class="form-control show-tick" id="dev_lang_cd">
-                                    <option value="">-- Ngôn ngữ lập trình --</option>
-                                    <option value="1">C#</option>
-                                    <option value="2">Java</option>
-                                    <option value="3">PHP</option>
-                                    <option value="40">NodeJS</option>
-                                </select>
+                            <div class="button-demo">
+                                <button type="button" class="btn btn-primary waves-effect" v-on:click="sendData()">Tạo mới</button>
                             </div>
-                        </div>
-                        <div class="button-demo">
-                            <button type="button" class="btn btn-primary waves-effect" v-on:click="sendData()">Tạo mới</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -73,6 +75,7 @@
 <script>
 /* eslint-disable */
 import axios from "axios";
+import pic from "../../../node_modules/adminbsb-materialdesign/images/thumbs-up.png";
 export default {
   data: function() {
     return {
@@ -100,7 +103,6 @@ export default {
       this.input.phone_number = phone_number;
       this.input.sex = sex;
       this.input.dev_lang_cd = dev_lang_cd;
-      console.log(this.input);
       axios({
         method: "POST",
         url: "http://localhost:8085/addEmployee",
@@ -108,16 +110,18 @@ export default {
         headers: { "content-type": "application/json" }
       }).then(
         result => {
-          console.log(this.input);
+          swal({
+            title: "Success!",
+            text: "The staff is created successfully",
+            imageUrl: pic
+          });
         },
         error => {
-          console.log(error);
+          swal("Oops!", "Something was wrong", "error");
         }
       );
+      return false;
     }
   }
 };
 </script>
-
-<style scoped>
-</style>
