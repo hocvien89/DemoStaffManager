@@ -105,10 +105,10 @@ app.post('/addEmployee', function (req, res, next) {
     res.status(200).send({ success: true, message: 'Thành công', data: param });
 })
 
-app.get('/countDevByLanguage', async function (req, res) {
+app.get('/countDevByTime', async function (req, res) {
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
-            return pool.request().query('SELECT dv.dev_language,COUNT(*) as total FROM dev_language dv LEFT JOIN staffs s ON dv.dev_lang_cd = s.dev_lang_cd GROUP BY dv.dev_lang_cd,dv.dev_language')
+            return pool.request().query('SELECT YEAR(start_date) as startYear,COUNT(*) as total FROM staffs GROUP BY YEAR(start_date)');
         }).then(result => {
 
             res.send(result.recordset);
