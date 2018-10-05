@@ -6,6 +6,7 @@
     </div>
 </template>
 <script>
+/* eslint-disable */
 import axios from 'axios'
 import chart from 'chart.js'
 export default {
