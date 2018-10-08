@@ -38,7 +38,7 @@
                                             <td>{{data.email}}</td>
                                             <td>{{data.address}}</td>
                                             <td><router-link class="edit-button" :to="{name:'EditStaff', params: {id: data.staff_cd}}"><i class="material-icons">mode_edit</i></router-link>
-                                            <i data-type="confirm" class="waves-effect material-icons detele" @click="showModal(data.staff_cd)">delete</i></td>
+                                            <i data-type="confirm" class="waves-effect material-icons detele" @click="showModal(data)">delete</i></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -68,7 +68,7 @@
           </div>
           <modal v-show="isModalVisible" @accept="deleteStaff" @close="closeModal">
             <div slot="body" style="margin-left: 10px;">
-              Do you want to delete staff "{{deleteStaff.staff_name}}"?
+              Do you want to delete staff "{{delStaff.staff_name}}"?
             </div>
           </modal>
     </div>
@@ -90,7 +90,7 @@ export default {
       pageSize: 10,
       pageSizeList: [5, 10, 25, 50, 100],
       currentPage: 1,
-      delStaff: [],
+      delStaff: {},
       isModalVisible: false
     }
   },
@@ -130,20 +130,20 @@ export default {
       )
     },
     deleteStaff: function () {
-      console.log(this.deleteStaff.staff_cd);
       axios({
         method: 'POST',
         url: 'http://localhost:8085/deleteEmployee',
-        data: {'id': this.deleteStaff.staff_cd}
+        data: {'staff_cd': this.delStaff.staff_cd}
       }).then((response) => {
-        this.myData.splice(this.myData.indexOf(data), 1)
+        this.myData.splice(this.myData.indexOf(this.delStaff), 1)
+        this.closeModal()
       }).catch(e => {
         console.log(e)
       })
     },
     showModal: function (data) {
       console.log(data);
-      this.deleteStaff = data
+      this.delStaff = data
       this.isModalVisible = true
     },
     closeModal: function () {
