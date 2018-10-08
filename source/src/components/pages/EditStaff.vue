@@ -8,14 +8,6 @@
              <div class="card">
                 <div class="body">
                     <form class="form-horizontal">
-                        <div class="row clearfix">
-                             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 text-left">
-                                <button type="button" class="btn btn-primary m-t-15 waves-effect">
-                                    <router-link class="btn-primary" to="/view-employee">Back</router-link>
-                                </button>
-                            </div>
-                        </div>
-
                         <div class="row clearfix text-danger">
                             <p v-if="errors.length">
                                 <ul>
@@ -141,10 +133,10 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                              <button type="button" class="btn btn-primary m-t-15 waves-effect" v-on:click="Save">Save</button>
-                          </div>
+                                <router-link class="btn btn-primary m-t-15 waves-effect" to="/view-employee">Back</router-link>
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect" v-on:click="Save">Save</button>
+                           </div>
                         </div>
-
                     </form>
                 </div>
              </div>
@@ -200,9 +192,9 @@ export default {
     Save() {
       this.errors = [];
       if (!this.input.staff_name) {
-         this.errors.push('Name required.');
-          return true;
-      }  
+        this.errors.push("Name required.");
+        return true;
+      }
       axios({
         method: "POST",
         url: process.env.BASE_URL + "editEmployee",
