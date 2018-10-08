@@ -25,7 +25,7 @@
                                     <thead>
                                         <tr>
                                             <th class="sorting_asc" @click="sort('staff_name')">Name</th>
-                                            <th class="sorting" @click="sort('dev_lang_cd')">Coding Languages</th>
+                                            <th class="sorting" @click="sort('dev_lang_cd_display')">Coding Languages</th>
                                             <th class="sorting" @click="sort('email')">Email</th>
                                             <th class="sorting" @click="sort('address')">Address</th>
                                             <th></th>
@@ -34,7 +34,7 @@
                                     <tbody>
                                         <tr v-for="(data, index) in pagingData" :key="index">
                                             <td>{{data.staff_name}}</td>
-                                            <td>{{data.dev_lang_cd}}</td>
+                                            <td>{{data.dev_lang_cd_display}}</td>
                                             <td>{{data.email}}</td>
                                             <td>{{data.address}}</td>
                                             <td><router-link class="edit-button" :to="{name:'EditStaff', params: {id: data.staff_cd}}"><i class="material-icons">mode_edit</i></router-link>
@@ -152,7 +152,26 @@ export default {
   },
   computed: {
     displayData: function () {
-      return this.myData.slice().sort((a, b) => {
+      var customData = this.myData.slice()
+      customData.forEach(data => {
+        switch (data.dev_lang_cd) {
+          case 1:
+            data.dev_lang_cd_display = 'C#'
+            break;
+          case 2:
+            data.dev_lang_cd_display = 'Java'
+            break;
+          case 3:
+            data.dev_lang_cd_display = 'PHP'
+            break;
+          case 4:
+            data.dev_lang_cd_display = 'NodeJS'
+            break;
+          default:
+            break;
+        }
+      })
+      return customData.sort((a, b) => {
         let modifier = 1
         if (this.currentSortDir === 'desc') {
           modifier = -1
