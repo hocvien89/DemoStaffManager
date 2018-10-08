@@ -31,10 +31,10 @@ app.use(function (req, res, next) {
 app.get('/getEmployeeById', function (req, res) {
     var employeeCd = req.query.id;
     console.log(employeeCd);
-    if(employeeCd === undefined) return res.send("error");
+    if (employeeCd === undefined) return res.send("error");
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
-            return pool.request().query('select * from staffs where staff_cd ='+employeeCd)
+            return pool.request().query('select * from staffs where staff_cd =' + employeeCd)
         }).then(result => {
 
             res.send(result.recordset);
@@ -88,13 +88,13 @@ app.post('/addEmployee', function (req, res, next) {
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request()
-            .input('staff_name', sql.NVarChar, param.staff_name)
-            .input('address', sql.NVarChar, param.address)
-            .input('email', sql.NVarChar, param.email)
-            .input('phone_number', sql.NVarChar, param.phone_number)
-            .input('sex', sql.Int, param.sex)
-            .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
-            .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd) ",param)
+                .input('staff_name', sql.NVarChar, param.staff_name)
+                .input('address', sql.NVarChar, param.address)
+                .input('email', sql.NVarChar, param.email)
+                .input('phone_number', sql.NVarChar, param.phone_number)
+                .input('sex', sql.Int, param.sex)
+                .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
+                .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd) ", param)
         }).then(result => {
 
             res.send(result.recordset);
@@ -114,23 +114,23 @@ app.post('/editEmployee', function (req, res, next) {
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request()
-            .input('staff_cd', sql.NVarChar, param.staff_cd)
-            .input('staff_name', sql.NVarChar, param.staff_name)
-            .input('address', sql.NVarChar, param.address)
-            .input('email', sql.NVarChar, param.email)
-            .input('phone_number', sql.NVarChar, param.phone_number)
-            .input('sex', sql.Int, param.sex)
-            .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
-            .input('start_date', sql.Date, param.start_date)
-            .input('end_date', sql.Date, param.end_date)
-            .query("UPDATE [dbo].[staffs] SET staff_name = @staff_name,address = @address,email = @email,phone_number=@phone_number,sex =@sex,dev_lang_cd=@dev_lang_cd,start_date=@start_date,end_date=@end_date WHERE staff_cd = @staff_cd",param)
+                .input('staff_cd', sql.NVarChar, param.staff_cd)
+                .input('staff_name', sql.NVarChar, param.staff_name)
+                .input('address', sql.NVarChar, param.address)
+                .input('email', sql.NVarChar, param.email)
+                .input('phone_number', sql.NVarChar, param.phone_number)
+                .input('sex', sql.Int, param.sex)
+                .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
+                .input('start_date', sql.Date, param.start_date)
+                .input('end_date', sql.Date, param.end_date)
+                .query("UPDATE [dbo].[staffs] SET staff_name = @staff_name,address = @address,email = @email,phone_number=@phone_number,sex =@sex,dev_lang_cd=@dev_lang_cd,start_date=@start_date,end_date=@end_date WHERE staff_cd = @staff_cd", param)
         }).then(result => {
 
             res.send(result.recordset);
 
             sql.close();
         }).catch(err => {
-
+            res.send({ success: false, message: 'error'});
             reject(err)
             sql.close();
         });
