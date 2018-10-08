@@ -9,6 +9,22 @@
                 <div class="body">
                     <form class="form-horizontal">
                         <div class="row clearfix">
+                             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 text-left">
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect">
+                                    <router-link class="btn-primary" to="/view-employee">Back</router-link>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix text-danger">
+                            <p v-if="errors.length">
+                                <ul>
+                                    <li v-for="(error,index) in errors" :key ="index">{{ error }}</li>
+                                </ul>
+                            </p>
+                        </div>
+
+                        <div class="row clearfix">
                             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                 <label for="txtStaffName">Staff name</label>
                             </div>
@@ -144,6 +160,7 @@ import moment from "moment";
 export default {
   data: function() {
     return {
+      errors: [],
       input: {
         staff_cd: "",
         staff_name: "",
@@ -181,7 +198,11 @@ export default {
   },
   methods: {
     Save() {
-      console.log("Save");
+      this.errors = [];
+      if (!this.input.staff_name) {
+         this.errors.push('Name required.');
+          return true;
+      }  
       axios({
         method: "POST",
         url: process.env.BASE_URL + "editEmployee",
@@ -189,10 +210,14 @@ export default {
         headers: { "content-type": "application/json" }
       }).then(
         result => {
-          console.log("sucess");
+          if (result.success) {
+            alert("Update success.");
+          } else {
+            alert("Update failure.");
+          }
         },
         error => {
-          console.log("Falure");
+          alert("Update failure");
         }
       );
     }

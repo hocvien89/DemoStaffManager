@@ -130,7 +130,7 @@ app.post('/editEmployee', function (req, res, next) {
 
             sql.close();
         }).catch(err => {
-
+            res.send({ success: false, message: 'error'});
             reject(err)
             sql.close();
         });
