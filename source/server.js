@@ -174,6 +174,7 @@ app.get('/countDevByLanguage', async function (req, res) {
 
 app.post('/deleteEmployee', function (req, res, next) {
     var param = req.body;
+    console.log(param);
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request()
