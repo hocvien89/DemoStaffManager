@@ -153,24 +153,24 @@ export default {
   computed: {
     displayData: function () {
       var customData = this.myData.slice()
-      customData.forEach(data => {
-        switch (data.dev_lang_cd) {
-          case 1:
-            data.dev_lang_cd_display = 'C#'
-            break;
-          case 2:
-            data.dev_lang_cd_display = 'Java'
-            break;
-          case 3:
-            data.dev_lang_cd_display = 'PHP'
-            break;
-          case 4:
-            data.dev_lang_cd_display = 'NodeJS'
-            break;
-          default:
-            break;
-        }
-      })
+      // customData.forEach(data => {
+      //   switch (data.dev_lang_cd) {
+      //     case 1:
+      //       data.dev_lang_cd_display = 'C#'
+      //       break;
+      //     case 2:
+      //       data.dev_lang_cd_display = 'Java'
+      //       break;
+      //     case 3:
+      //       data.dev_lang_cd_display = 'PHP'
+      //       break;
+      //     case 4:
+      //       data.dev_lang_cd_display = 'NodeJS'
+      //       break;
+      //     default:
+      //       break;
+      //   }
+      // })
       return customData.sort((a, b) => {
         let modifier = 1
         if (this.currentSortDir === 'desc') {
