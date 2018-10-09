@@ -119,7 +119,7 @@ export default {
     getEmploy: function () {
       axios({
         method: 'GET',
-        url: 'http://localhost:8085/getEmployeeList'
+        url: process.env.BASE_URL + 'getEmployeeList'
       }).then(
         result => {
           this.myData = result.data
@@ -132,7 +132,7 @@ export default {
     deleteStaff: function () {
       axios({
         method: 'POST',
-        url: 'http://localhost:8085/deleteEmployee',
+        url: process.env.BASE_URL + 'deleteEmployee',
         data: {'staff_cd': this.delStaff.staff_cd}
       }).then((response) => {
         this.myData.splice(this.myData.indexOf(this.delStaff), 1)

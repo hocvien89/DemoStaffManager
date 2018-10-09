@@ -51,7 +51,7 @@ app.get('/getEmployeeById', function (req, res) {
 app.get('/getEmployeeList', async function (req, res) {
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
-            return pool.request().query('select * from staffs')
+            return pool.request().query('SELECT S.*, D.dev_language AS dev_lang_cd_display FROM staffs AS S INNER JOIN dev_language AS D ON D.dev_lang_cd = S.dev_lang_cd')
         }).then(result => {
 
             res.send(result.recordset);
@@ -70,9 +70,7 @@ app.get('/getDevLanguage', async function (req, res) {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request().query('select * from dev_language')
         }).then(result => {
-
             res.send(result.recordset);
-
             sql.close();
         }).catch(err => {
 
@@ -96,9 +94,7 @@ app.post('/addEmployee', function (req, res, next) {
                 .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
                 .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd) ", param)
         }).then(result => {
-
             res.send(result.recordset);
-
             sql.close();
         }).catch(err => {
 
@@ -106,7 +102,6 @@ app.post('/addEmployee', function (req, res, next) {
             sql.close();
         });
     });
-    res.status(200).send({ success: true, message: 'Thành công', data: param });
 })
 
 app.post('/editEmployee', function (req, res, next) {
@@ -125,17 +120,15 @@ app.post('/editEmployee', function (req, res, next) {
                 .input('end_date', sql.Date, param.end_date)
                 .query("UPDATE [dbo].[staffs] SET staff_name = @staff_name,address = @address,email = @email,phone_number=@phone_number,sex =@sex,dev_lang_cd=@dev_lang_cd,start_date=@start_date,end_date=@end_date WHERE staff_cd = @staff_cd", param)
         }).then(result => {
-
-            res.send(result.recordset);
-
+            res.send({ success: true, message: 'success' });
             sql.close();
+
         }).catch(err => {
-            res.send({ success: false, message: 'error'});
+            res.send({ success: false, message: 'error' });
             reject(err)
             sql.close();
         });
     });
-    res.status(200).send({ success: true, message: 'Thành công', data: param });
 })
 
 app.get('/countDevByTime', async function (req, res) {
@@ -143,9 +136,7 @@ app.get('/countDevByTime', async function (req, res) {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request().query('SELECT YEAR(start_date) as startYear,COUNT(*) as total FROM staffs GROUP BY YEAR(start_date)');
         }).then(result => {
-
             res.send(result.recordset);
-
             sql.close();
         }).catch(err => {
 
