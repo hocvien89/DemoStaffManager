@@ -5,11 +5,11 @@ var fs = require("fs");
 var bodyParser = require('body-parser');
 var sql = require("mssql");
 const config = {
-    user: 'sa',
-    password: '123456a@',
-    server: '172.16.18.191', // You can use 'localhost\\instance' to connect to named instance
-    database: 'DemoStaffManager',
-    port: 1433,
+    user: 'root',
+    password: 'root',
+    host: '18.223.101.113', // You can use 'localhost\\instance' to connect to named instance
+    database: 'demostaffmanager',
+    port: 3306,
 
     options: {
         encrypt: true // Use this if you're on Windows Azure
@@ -20,7 +20,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 //CORS Middleware
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     //Enabling CORS 
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/getEmployeeById', function (req, res) {
+app.get('/getEmployeeById', function(req, res) {
     var employeeCd = req.query.id;
     console.log(employeeCd);
     if (employeeCd === undefined) return res.send("error");
@@ -48,7 +48,7 @@ app.get('/getEmployeeById', function (req, res) {
     });
 });
 
-app.get('/getEmployeeList', async function (req, res) {
+app.get('/getEmployeeList', async function(req, res) {
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request().query('select * from staffs')
@@ -65,7 +65,7 @@ app.get('/getEmployeeList', async function (req, res) {
     });
 })
 
-app.get('/getDevLanguage', async function (req, res) {
+app.get('/getDevLanguage', async function(req, res) {
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request().query('select * from dev_language')
@@ -82,7 +82,7 @@ app.get('/getDevLanguage', async function (req, res) {
     });
 })
 
-app.post('/addEmployee', function (req, res, next) {
+app.post('/addEmployee', function(req, res, next) {
     var param = req.body;
     console.log(param.staff_name);
     return new Promise((resolve, reject) => {
@@ -109,7 +109,7 @@ app.post('/addEmployee', function (req, res, next) {
     res.status(200).send({ success: true, message: 'Thành công', data: param });
 })
 
-app.post('/editEmployee', function (req, res, next) {
+app.post('/editEmployee', function(req, res, next) {
     var param = req.body;
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
@@ -130,7 +130,7 @@ app.post('/editEmployee', function (req, res, next) {
 
             sql.close();
         }).catch(err => {
-            res.send({ success: false, message: 'error'});
+            res.send({ success: false, message: 'error' });
             reject(err)
             sql.close();
         });
@@ -138,7 +138,7 @@ app.post('/editEmployee', function (req, res, next) {
     res.status(200).send({ success: true, message: 'Thành công', data: param });
 })
 
-app.get('/countDevByTime', async function (req, res) {
+app.get('/countDevByTime', async function(req, res) {
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request().query('SELECT YEAR(start_date) as startYear,COUNT(*) as total FROM staffs GROUP BY YEAR(start_date)');
@@ -155,24 +155,22 @@ app.get('/countDevByTime', async function (req, res) {
     });
 })
 
-app.get('/countDevByLanguage', async function (req, res) {
+app.get('/countDevByLanguage', async function(req, res) {
     return new Promise((resolve, reject) => {
-        new sql.ConnectionPool(config).connect().then(pool => {
-            return pool.request().query('SELECT dv.dev_language,COUNT(*) as total FROM dev_language dv LEFT JOIN staffs s ON dv.dev_lang_cd = s.dev_lang_cd GROUP BY dv.dev_lang_cd,dv.dev_language')
-        }).then(result => {
-
-            res.send(result.recordset);
-
-            sql.close();
-        }).catch(err => {
-
-            reject(err)
-            sql.close();
+        var connection = mysql.createConnection(config);
+        connection.connect();
+        connection.query('SELECT dv.dev_language,COUNT(*) as total FROM dev_language dv LEFT JOIN staffs s ON dv.dev_lang_cd = s.dev_lang_cd GROUP BY dv.dev_lang_cd,dv.dev_language', (err, rows) => {
+            if (err) {
+                connection.end();
+                return reject(err);
+            }
+            res.send(rows);
         });
+        connection.end();
     });
 })
 
-app.post('/deleteEmployee', function (req, res, next) {
+app.post('/deleteEmployee', function(req, res, next) {
     var param = req.body;
     console.log(param);
     return new Promise((resolve, reject) => {
@@ -191,7 +189,7 @@ app.post('/deleteEmployee', function (req, res, next) {
     });
 })
 
-app.get('/countStaffByTime', async function (req, res) {
+app.get('/countStaffByTime', async function(req, res) {
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
             return pool.request().query('select datepart(yyyy, start_date) as years, count (staff_cd) as counts from staffs group by datepart(yyyy, start_date)')
@@ -209,7 +207,7 @@ app.get('/countStaffByTime', async function (req, res) {
 
 })
 
-var server = app.listen(8085, function () {
+var server = app.listen(8085, function() {
 
     var host = server.address().address
     var port = server.address().port
