@@ -190,7 +190,7 @@ export default {
         if (this.searchQuery) {
           var lowerSearch = this.searchQuery.toLowerCase()
           if ((row.staff_name && row.staff_name.toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.dev_lang_cd && row.dev_lang_cd.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
+              (row.dev_lang_cd && row.dev_lang_cd_display.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
               (row.email && row.email.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
               (row.address && row.address.toString().toLowerCase().indexOf(lowerSearch) > -1)) {
             return true
