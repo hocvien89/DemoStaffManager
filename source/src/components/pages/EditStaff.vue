@@ -195,6 +195,14 @@ export default {
         this.errors.push("Name required.");
         return true;
       }
+       if(this.input.start_date && !moment(this.input.start_date).isValid()){
+        this.errors.push("Start date not correct format YYYY-MM-DD");
+        return true;
+      }
+      if(this.input.end_date && !moment(this.input.end_date).isValid()){
+        this.errors.push("End date not correct format YYYY-MM-DD");
+        return true;
+      }
       axios({
         method: "POST",
         url: "http://localhost:8085/editEmployee",
