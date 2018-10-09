@@ -169,7 +169,7 @@ export default {
   created() {
     this.input.staff_cd = this.$route.params.id;
     axios
-      .get("http://localhost:8085/getEmployeeById", {
+      .get(process.env.BASE_URL +"getEmployeeById", {
         params: {
           id: this.$route.params.id
         }
@@ -205,7 +205,7 @@ export default {
       }
       axios({
         method: "POST",
-        url: "http://localhost:8085/editEmployee",
+        url: process.env.BASE_URL + "editEmployee",
         data: this.input,
         headers: { "content-type": "application/json" }
       }).then(

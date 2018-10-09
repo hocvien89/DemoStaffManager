@@ -94,7 +94,9 @@ app.post('/addEmployee', function (req, res, next) {
                 .input('phone_number', sql.NVarChar, param.phone_number)
                 .input('sex', sql.Int, param.sex)
                 .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
-                .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd) ", param)
+                .input('start_date', sql.Date, param.start_date)
+                .input('end_date', sql.Date, param.end_date)
+                .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd, start_date, end_date) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd, @start_date, @end_date) ", param)
         }).then(result => {
 
             res.send(result.recordset);
@@ -136,6 +138,77 @@ app.post('/editEmployee', function (req, res, next) {
         });
     });
     res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+app.get('/countDevByTime', async function (req, res) {
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().query('SELECT YEAR(start_date) as startYear,COUNT(*) as total FROM staffs GROUP BY YEAR(start_date)');
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+})
+
+app.get('/countDevByLanguage', async function (req, res) {
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().query('SELECT dv.dev_language,COUNT(*) as total FROM dev_language dv LEFT JOIN staffs s ON dv.dev_lang_cd = s.dev_lang_cd GROUP BY dv.dev_lang_cd,dv.dev_language')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+})
+
+app.post('/deleteEmployee', function (req, res, next) {
+    var param = req.body;
+    console.log(param);
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('staff_cd', sql.NVarChar, param.staff_cd)
+                .query("DELETE staffs WHERE staff_cd = @staff_cd", param)
+        }).then(result => {
+            res.status(200).send({ success: true, message: 'delete employee success', data: param });
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+})
+
+app.get('/countStaffByTime', async function (req, res) {
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().query('select datepart(yyyy, start_date) as years, count (staff_cd) as counts from staffs group by datepart(yyyy, start_date)')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+
 })
 
 var server = app.listen(8085, function () {

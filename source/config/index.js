@@ -40,7 +40,10 @@ module.exports = {
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
 
-    cssSourceMap: true
+    cssSourceMap: true,
+
+    //server link
+    serverUrl: 'http://localhost:8085/'
   },
 
   build: {
