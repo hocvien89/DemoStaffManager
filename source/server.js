@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 //CORS Middleware
 app.use(function (req, res, next) {
-    //Enabling CORS 
+    //Enabling CORS
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
@@ -199,6 +199,122 @@ app.get('/countStaffByTime', async function (req, res) {
     });
 
 })
+
+
+app.post('/projectRegister', function (req, res, next) {
+    var param = req.body;
+    console.log(param.project_name);
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('project_name', sql.NVarChar, param.project_name)
+                .input('type', sql.Int, param.type)
+                .input('discription', sql.NVarChar, param.discription)
+                .input('date_start', sql.Date, param.date_start)
+                .input('date_end', sql.Date, param.date_end)
+                .input('ins_user', sql.Int, param.ins_user)
+                .execute('proc_InsertProject')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+    res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+app.get('/getProjectList', async function (req, res) {
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().execute('[dbo].[proc_GetListProject]')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+})
+
+
+app.post('/editProject', function (req, res, next) {
+    var param = req.body;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('project_cd', sql.Int, param.project_cd)
+                .input('project_name', sql.NVarChar, param.project_name)
+                .input('type', sql.Int, param.type)
+                .input('discription', sql.NVarChar, param.discription)
+                .input('date_start', sql.Date, param.date_start)
+                .input('date_end', sql.Date, param.date_end)
+                .input('upd_user', sql.Int, param.upd_user)
+                .execute('[dbo].[proc_EditProject]')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+            res.send({ success: false, message: 'error'});
+            reject(err)
+            sql.close();
+        });
+    });
+    res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+app.post('/deleteProject', function (req, res, next) {
+    var param = req.body;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('project_cd', sql.Int, param.project_cd)
+                .execute('proc_DeleteProject')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+            res.send({ success: false, message: 'error'});
+            reject(err)
+            sql.close();
+        });
+    });
+    res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+
+app.get('/getProjectById', function (req, res) {
+    var project_cd = req.query.id;
+    console.log(project_cd);
+    if (project_cd === undefined) return res.send("error");
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().input('project_cd', sql.Int, project_cd).execute('proc_GetProjectById')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+            res.send("error");
+            reject(err)
+            sql.close();
+        });
+    });
+});
+
 
 var server = app.listen(8085, function () {
 
