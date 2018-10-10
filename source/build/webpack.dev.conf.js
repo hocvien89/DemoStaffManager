@@ -66,8 +66,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       }
     ]),
     new webpack.ProvidePlugin({
-      'Waves': 'node-waves'
-    })
+      'Waves': 'node-waves',
+      "moment": "moment",
+      "autosize": "autosize"
+    }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
 })
 
