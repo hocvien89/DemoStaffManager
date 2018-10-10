@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VeeValidate from 'vee-validate'
 
 import '../node_modules/adminbsb-materialdesign/plugins/bootstrap/css/bootstrap.css'
 import '../node_modules/adminbsb-materialdesign/plugins/node-waves/waves.css'
@@ -23,6 +24,7 @@ import '../node_modules/adminbsb-materialdesign/js/admin.js'
 import '../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js'
 Vue.config.productionTip = false
 /* eslint-disable no-new */
+Vue.use(VeeValidate)
 new Vue({
   el: '#app',
   router,

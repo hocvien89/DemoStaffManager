@@ -7,6 +7,9 @@ import EditStaff from '@/components/pages/EditStaff'
 import ViewReportYear from '@/components/pages/ReportYear'
 import ViewReportLanguage from '@/components/pages/ReportLanguage'
 import ReportStaffByTime from '@/components/pages/ReportStaffByTime'
+import ProjectRegister from '@/components/pages/ProjectRegister'
+import ViewProjectList from '@/components/pages/ViewProjectList'
+import EditProject from '@/components/pages/EditProject'
 
 Vue.use(Router)
 
@@ -46,6 +49,21 @@ export default new Router({
       path: '/report-staff-by-time',
       name: 'ReportStaffByTime',
       component: ReportStaffByTime
+    },
+    {
+      path: '/project-register',
+      name: 'ProjectRegister',
+      component: ProjectRegister
+    },
+    {
+      path: '/view-project-list',
+      name: 'ViewProjectList',
+      component: ViewProjectList
+    },
+    {
+      path: '/edit-project/:id',
+      name: 'EditProject',
+      component: EditProject
     }
   ]
 })

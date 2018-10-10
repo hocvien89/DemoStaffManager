@@ -67,6 +67,21 @@
                                 <router-link class="toggled" to="/view-employee">Employee List</router-link>
                             </li>
                           </ul>
+                           <a class="menu-toggle" @click="toggleMenu">
+                              <i class="material-icons">group</i>
+                              <span>Project</span>
+                          </a>
+                           <ul class="ml-menu" id="project-menu" :style="{'display':isExpand.indexOf('project-menu') > -1 ? 'block' : 'none'}">
+                            <li id="edit-project" :class="{'active':isActive == 'edit-project'}" @click="setActive">
+                                <router-link class="toggled" :to="{ name: 'EditProject', params: { id: 1}}">Edit Project</router-link>
+                            </li>
+                            <li id="project-register" :class="{'active':isActive == 'project-register'}" @click="setActive">
+                                <router-link class="toggled" to="/project-register">Register project</router-link>
+                            </li>
+                            <li id="view-project-list" :class="{'active':isActive == 'view-project-list'}" @click="setActive">
+                                <router-link class="toggled" to="/view-project-list">Project List</router-link>
+                            </li>
+                          </ul>
                         </li>
                     </ul>
                 </div>
