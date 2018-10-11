@@ -72,9 +72,6 @@
                               <span>Project</span>
                           </a>
                            <ul class="ml-menu" id="project-menu" :style="{'display':isExpand.indexOf('project-menu') > -1 ? 'block' : 'none'}">
-                            <li id="edit-project" :class="{'active':isActive == 'edit-project'}" @click="setActive">
-                                <router-link class="toggled" :to="{ name: 'EditProject', params: { id: 1}}">Edit Project</router-link>
-                            </li>
                             <li id="project-register" :class="{'active':isActive == 'project-register'}" @click="setActive">
                                 <router-link class="toggled" to="/project-register">Register project</router-link>
                             </li>
@@ -121,7 +118,7 @@ export default {
   },
   methods: {
     toggleMenu: function () {
-      var id = event.target.closest('li').querySelector('ul').id
+      var id = event.target.nextElementSibling.id
       var index = this.isExpand.indexOf(id)
       if (index > -1) {
         this.isExpand.splice(index, 1)
