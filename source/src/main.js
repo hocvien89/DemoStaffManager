@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
 import '../node_modules/adminbsb-materialdesign/plugins/bootstrap/css/bootstrap.css'
 import '../node_modules/adminbsb-materialdesign/plugins/node-waves/waves.css'
 import '../node_modules/adminbsb-materialdesign/plugins/animate-css/animate.css'
