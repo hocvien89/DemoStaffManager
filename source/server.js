@@ -92,7 +92,9 @@ app.post('/addEmployee', function (req, res, next) {
                 .input('phone_number', sql.NVarChar, param.phone_number)
                 .input('sex', sql.Int, param.sex)
                 .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
-                .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd) ", param)
+                .input('start_date', sql.Date, param.start_date)
+                .input('end_date', sql.Date, param.end_date)
+                .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd, start_date, end_date) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd, @start_date, @end_date) ", param)
         }).then(result => {
             res.send(result.recordset);
             sql.close();

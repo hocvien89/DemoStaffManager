@@ -6,7 +6,7 @@
         <!-- Widgets -->
         <div class="row clearfix">
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <router-link class="toggled" to="/view-employee">
+                <router-link class="toggled" to="/employee-list">
                 <div class="info-box bg-pink hover-expand-effect">
                     <div class="icon">
                         <i class="material-icons">playlist_add</i>
@@ -45,7 +45,7 @@
                 </router-link>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <router-link class="toggled" to="/add-employee">
+                <router-link class="toggled" to="/employee-register">
                 <div class="info-box bg-orange hover-expand-effect">
                     <div class="icon">
                         <i class="material-icons">person_add</i>

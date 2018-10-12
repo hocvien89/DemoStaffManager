@@ -57,14 +57,11 @@
                               <span>Employees</span>
                           </a>
                           <ul class="ml-menu" id="employee-menu" :style="{'display':isExpand.indexOf('employee-menu') > -1 ? 'block' : 'none'}">
-                            <li id="edit-staff" :class="{'active':isActive == 'edit-staff'}" @click="setActive">
-                                <router-link class="toggled" :to="{ name: 'EditStaff', params: { id: 4}}">Edit Employee</router-link>
-                            </li>
                             <li id="add-employee" :class="{'active':isActive == 'add-employee'}" @click="setActive">
-                                <router-link class="toggled" to="/add-employee">Add Employee</router-link>
+                                <router-link class="toggled" to="/employee-register">Add Employee</router-link>
                             </li>
                             <li id="view-list" :class="{'active':isActive == 'view-list'}" @click="setActive">
-                                <router-link class="toggled" to="/view-employee">Employee List</router-link>
+                                <router-link class="toggled" to="/employee-list">Employee List</router-link>
                             </li>
                           </ul>
                            <a class="menu-toggle" @click="toggleMenu">
@@ -72,14 +69,14 @@
                               <span>Project</span>
                           </a>
                            <ul class="ml-menu" id="project-menu" :style="{'display':isExpand.indexOf('project-menu') > -1 ? 'block' : 'none'}">
-                            <li id="edit-project" :class="{'active':isActive == 'edit-project'}" @click="setActive">
-                                <router-link class="toggled" :to="{ name: 'EditProject', params: { id: 1}}">Edit Project</router-link>
+                            <li id="edit-project" :class="{'active':isActive == 'project-edit'}" @click="setActive">
+                                <router-link class="toggled" :to="{ name: 'ProjectEdit', params: { id: 1}}">Edit Project</router-link>
                             </li>
                             <li id="project-register" :class="{'active':isActive == 'project-register'}" @click="setActive">
                                 <router-link class="toggled" to="/project-register">Register project</router-link>
                             </li>
-                            <li id="view-project-list" :class="{'active':isActive == 'view-project-list'}" @click="setActive">
-                                <router-link class="toggled" to="/view-project-list">Project List</router-link>
+                            <li id="view-project-list" :class="{'active':isActive == 'project-list'}" @click="setActive">
+                                <router-link class="toggled" to="/project-list">Project List</router-link>
                             </li>
                           </ul>
                         </li>
