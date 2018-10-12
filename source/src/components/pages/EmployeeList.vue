@@ -17,7 +17,7 @@
                                 </div>
                               </div>
                               <div class="col-sm-2" style="float: right;">
-                                <router-link to="/add-employee"><button type="button" class="btn btn-success waves-effect">Add new</button></router-link>
+                                <router-link to="/employee-register"><button type="button" class="btn btn-success waves-effect">Add new</button></router-link>
                               </div>
                             </div>
                             <div class="table-responsive">
@@ -37,7 +37,7 @@
                                             <td>{{data.dev_lang_cd_display}}</td>
                                             <td>{{data.email}}</td>
                                             <td>{{data.address}}</td>
-                                            <td><router-link class="edit-button" :to="{name:'EditStaff', params: {id: data.staff_cd}}"><i class="material-icons">mode_edit</i></router-link>
+                                            <td><router-link class="edit-button" :to="{name:'EmployeeEdit', params: {id: data.staff_cd}}"><i class="material-icons">mode_edit</i></router-link>
                                             <i data-type="confirm" class="waves-effect material-icons detele" @click="showModal(data)">delete</i></td>
                                         </tr>
                                     </tbody>

@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid" id="addEmployee">
         <div class="block-header">
             <h2>Register Staff Information</h2>
         </div>
@@ -45,23 +45,25 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="datepicker form-control" id="start_date" required placeholder="Time Start">
+                                            <input type="text" class="datepicker form-control" id="start_date" required>
+                                            <label class="form-label" id="start_date_label">Start Date </label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="datepicker form-control" id="end_date" required placeholder="Time End">
+                                            <input type="text" class="datepicker form-control" id="end_date" required>
+                                            <label class="form-label" id="end_date_label">End Date </label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="demo-radio-button">
                                         <label>Sex</label>
-                                        <input name="sex" type="radio" id="sex_1" value="1" checked />
+                                        <input name="sex" type="radio" id="sex_1" value="0" checked />
                                         <label for="sex_1">Male</label>
-                                        <input name="sex" type="radio" id="sex_2" value="0" />
+                                        <input name="sex" type="radio" id="sex_2" value="1" />
                                         <label for="sex_2">Female</label>
                                     </div>
                                 </div>
@@ -102,6 +104,7 @@
 import axios from "axios";
 import pic from "../../../node_modules/adminbsb-materialdesign/images/thumbs-up.png";
 export default {
+  name: "addEmployee",
   data: function() {
     return {
       input: {
@@ -122,6 +125,33 @@ export default {
         clearButton: true,
         weekStart: 1,
         time: false
+    });
+    //On focus event
+    $('.form-control').focus(function () {
+        $(this).parent().addClass('focused');
+    });
+
+    //On focusout event
+    $('.form-control').focusout(function () {
+        var $this = $(this);
+        if ($this.parents('.form-group').hasClass('form-float')) {
+            if ($this.val() == '') { $this.parents('.form-line').removeClass('focused'); }
+        }
+        else {
+            $this.parents('.form-line').removeClass('focused');
+        }
+    });
+
+    //On label click
+    $('body').on('click', '.form-float .form-line .form-label', function () {
+        $(this).parent().find('input').focus();
+    });
+
+    //Not blank form
+    $('.form-control').each(function () {
+        if ($(this).val() !== '') {
+            $(this).parents('.form-line').addClass('focused');
+        }
     });
   },
   methods: {
@@ -144,6 +174,27 @@ export default {
       var dev_lang_cd = $('#dev_lang_cd').val();
       var start_date = $('#start_date').val();
       var end_date = $('#end_date').val();
+      if (start_date == '') {
+        $('#start_date').focus();
+        $('#start_date').parent().addClass('focused');
+        $('#start_date_label').text('Start Date is not valid');
+        $('#start_date_label').css('color', 'red');
+        return;
+      } else {
+          $('#start_date_label').text('Start Date');
+          $('#start_date_label').css('color', '');
+      }
+
+      if (end_date == '') {
+        $('#end_date').focus();
+        $('#end_date').parent().addClass('focused');
+        $('#end_date_label').text('End Date is not valid');
+        $('#end_date_label').css('color', 'red');
+        return;
+      } else {
+          $('#end_date_label').text('End Date');
+          $('#end_date_label').css('color', '');
+      }
 
       this.input.staff_name = staff_name;
       this.input.address = address;
@@ -181,8 +232,8 @@ export default {
         $('#email').parent().removeClass('focused');
         $('#phone_number').val('');
         $('#phone_number').parent().removeClass('focused');
-        $('#dev_lang_cd').val('');
-        $('input[name=sex][value=1]').prop('checked', true);
+        $('#dev_lang_cd').val('0');
+        $('input[name=sex][value=0]').prop('checked', true);
         $('#start_date').val('');
         $('#start_date').parent().removeClass('focused');
         $('#end_date').val('');
