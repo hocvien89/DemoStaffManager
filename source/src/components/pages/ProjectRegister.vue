@@ -63,7 +63,7 @@
                             <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="date" id="dateStart" class="form-control" placeholder="Enter date start project" name="start date" v-validate="'required'" v-bind:class="{'form-control': true, 'error': errors.has('start date') }">
+                                        <input type="text" id="dateStart" class="form-control datepicker" placeholder="Enter date start project" name="start date" v-validate="'required'" v-bind:class="{'form-control': true, 'error': errors.has('start date') }">
                                     </div>
                                      <span v-show="errors.has('start date')" class="text-danger">{{ errors.first('start date') }}</span>
                                 </div>
@@ -76,7 +76,7 @@
                             <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="date" id="dateEnd" class="form-control" placeholder="Enter date end project" name="end date" v-validate="'required'" v-bind:class="{'form-control': true, 'error': errors.has('end date') }">
+                                        <input type="text" id="dateEnd" class="form-control datepicker" placeholder="Enter date end project" name="end date" v-validate="'required'" v-bind:class="{'form-control': true, 'error': errors.has('end date') }">
                                     </div>
                                     <span v-show="errors.has('end date')" class="text-danger">{{ errors.first('end date') }}</span>
                                 </div>
@@ -115,8 +115,9 @@
 </template>
 <script>
 /* eslint-disable */
-import axios from "axios";
-import pic from "../../../node_modules/adminbsb-materialdesign/images/thumbs-up.png";
+import axios from "axios"
+import pic from "../../../node_modules/adminbsb-materialdesign/images/thumbs-up.png"
+import moment from 'moment'
 export default {
   data: function() {
     return {
@@ -128,9 +129,25 @@ export default {
           date_end:"",
           ins_user:""
       },
+        dataBackEnd:{
+            project_name:"",
+          type:"",
+          discription:"",
+          date_start:"",
+          date_end:"",
+          ins_user:""
+        },
       listEmployee:[],
       submitted: false
     }
+  },
+   mounted(){
+    $('.datepicker').bootstrapMaterialDatePicker({
+        format: 'DD-MM-YYYY',
+        clearButton: true,
+        weekStart: 1,
+        time: false
+    });
   },
   created: function () {
     this.getEmployeeList();
@@ -144,16 +161,16 @@ export default {
         var date_end = $('#dateEnd').val();
         var ins_user = $('#employeeCode').val();
 
-        this.input.project_name = project_name;
-        this.input.type = type;
-        this.input.discription = discription;
-        this.input.date_start = date_start;
-        this.input.date_end = date_end;
-        this.input.ins_user = ins_user;
+        this.dataBackEnd.project_name = project_name;
+        this.dataBackEnd.type = type;
+        this.dataBackEnd.discription = discription;
+        this.dataBackEnd.date_start = this.formatDateBackEnd(date_start);
+        this.dataBackEnd.date_end =  this.formatDateBackEnd(date_end);
+        this.dataBackEnd.ins_user = ins_user;
       axios({
         method: "POST",
         url: process.env.BASE_URL +"projectRegister",
-        data: this.input,
+        data: this.dataBackEnd,
         headers: { "content-type": "application/json" }
       }).then(
          result => {
@@ -187,7 +204,10 @@ export default {
          $('input').val('');
          $('select').val('');
          this.input = [];
-        this.$refs.projectName.focus();
+          this.dataBackEnd = [];
+        $('.form-control').blur();
+        //this.$refs.projectName.focus();
+        $('#projectName').focus();
          // console.log('a');
      },
      onSubmit(e){
@@ -198,10 +218,18 @@ export default {
                    //console.log("a");
                 }
             });
+     },
+     formatDateBackEnd(dateValue){
+        return moment(dateValue,'DD/MM/YYYY').format('MM/DD/YYYY')
      }
   }
 };
 </script>
 <style scoped>
-
+    .form-control:focus{
+        border-color: red;/*rgba(3, 169, 244, 0.5);*/
+    },
+    .datepicker:focus{
+        border-color: gray;
+    }
 </style>

@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     toggleMenu: function () {
-      var id = event.target.closest('li').querySelector('ul').id
+      var id = event.target.nextElementSibling.id
       var index = this.isExpand.indexOf(id)
       if (index > -1) {
         this.isExpand.splice(index, 1)
