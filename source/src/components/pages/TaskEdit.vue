@@ -64,7 +64,7 @@
                             <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
                                 <button type="button" class="btn btn-primary m-t-15 waves-effect" v-on:click="onSubmit()">save</button>
                                 <button type="button" class="btn btn-primary m-t-15 waves-effect" v-on:click="formatForm()">Clear</button>
-                                <router-link class="btn btn-primary m-t-15 waves-effect" to="/task-list">Cancel</router-link>
+                                <router-link class="btn btn-primary m-t-15 waves-effect" :to="{name:'TaskList', params: {project_cd: this.$route.params.taskData.project_cd}}">Cancel</router-link>
                            </div>
                         </div>
                     </form>
