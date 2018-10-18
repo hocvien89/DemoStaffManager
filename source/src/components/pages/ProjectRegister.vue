@@ -228,7 +228,7 @@ export default {
 <style scoped>
     .form-control:focus{
         border-color: red;/*rgba(3, 169, 244, 0.5);*/
-    },
+    }
     .datepicker:focus{
         border-color: gray;
     }

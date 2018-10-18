@@ -92,9 +92,7 @@ app.post('/addEmployee', function (req, res, next) {
                 .input('phone_number', sql.NVarChar, param.phone_number)
                 .input('sex', sql.Int, param.sex)
                 .input('dev_lang_cd', sql.Int, param.dev_lang_cd)
-                .input('start_date', sql.Date, param.start_date)
-                .input('end_date', sql.Date, param.end_date)
-                .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd, start_date, end_date) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd, @start_date, @end_date) ", param)
+                .query("Insert into staffs (staff_name, address, email, phone_number, sex, dev_lang_cd) OUTPUT INSERTED.staff_cd values(@staff_name, @address, @email, @phone_number, @sex, @dev_lang_cd) ", param)
         }).then(result => {
             res.send(result.recordset);
             sql.close();
@@ -316,6 +314,87 @@ app.get('/getProjectById', function (req, res) {
         });
     });
 });
+
+
+app.post('/taskRegister', function (req, res, next) {
+    var param = req.body;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('task_name', sql.NVarChar, param.task_name)
+                .input('description', sql.NVarChar, param.description)
+                .input('begin_date', param.begin_date)
+                .input('end_date', param.end_date)
+                .input('project_cd', sql.Int, param.project_cd)
+                .execute('proc_InsertTask')
+        }).then(result => {
+            res.send(result.recordset);
+            sql.close();
+        }).catch(err => {
+            reject(err)
+            sql.close();
+        });
+    });
+    res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+app.get('/getTaskList', function (req, res, next) {
+    var project_cd = req.query.id;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().input('project_cd', sql.Int, project_cd).execute('[dbo].[proc_GetListTask]')
+        }).then(result => {
+            res.send(result.recordset);
+            sql.close();
+        }).catch(err => {
+            reject(err)
+            sql.close();
+        });
+    });
+})
+
+app.post('/deleteTask', function (req, res, next) {
+    var param = req.body;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('task_cd', sql.Int, param.task_cd)
+                .query("UPDATE [dbo].[tasks] SET is_delete = 1 WHERE task_cd=@task_cd")
+                //.execute('proc_DeleteTask')
+        }).then(result => {
+            res.send(result.recordset);
+            sql.close();
+        }).catch(err => {
+            res.send({ success: false, message: 'error'});
+            reject(err)
+            sql.close();
+        });
+    });
+     res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+app.post('/updateTask', function (req, res, next) {
+    var param = req.body;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('task_cd', sql.Int, param.task_cd)
+                .input('task_name', sql.NVarChar, param.task_name)
+                .input('description', sql.NVarChar, param.description)
+                .input('begin_date', param.begin_date)
+                .input('end_date', param.end_date)
+                .query("UPDATE [dbo].[tasks] SET task_name = @task_name, description = @description, begin_date = @begin_date, end_date = @end_date, upd_date = GETDATE() WHERE task_cd=@task_cd")
+        }).then(result => {
+            res.send(result.recordset);
+            sql.close();
+        }).catch(err => {
+            res.send({ success: false, message: 'error'});
+            reject(err)
+            sql.close();
+        });
+    });
+    res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
 
 
 var server = app.listen(8085, function () {

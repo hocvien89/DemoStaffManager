@@ -5,7 +5,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Project List</h2>
+                            <h2>Task List of {{project_data.project_name}}</h2>
                         </div>
                         <div class="body">
                             <div class="row">
@@ -17,34 +17,29 @@
                                 </div>
                               </div>
                               <div class="col-sm-2" style="float: right;">
-                                <router-link to="/project-register"><button type="button" class="btn btn-success waves-effect">Create Project</button></router-link>
+                                <router-link :to="{name:'TaskRegister', params: {project_cd: project_data.project_cd}}"><button type="button" class="btn btn-success waves-effect">Create Task</button></router-link>
                               </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                     <thead>
                                         <tr>
-                                            <th class="sorting_asc" @click="sort('project_name')">Project Name</th>
-                                            <th class="sorting" @click="sort('type')">Project Type</th>
-                                            <th class="sorting" @click="sort('date_start')">Date Start</th>
-                                            <th class="sorting" @click="sort('date_end')">Date End</th>
-                                            <th class="sorting" @click="sort('staff_name')">Create By</th>
-                                            <th class="sorting" @click="sort('discription')">Description</th>
+                                            <th class="sorting_asc" @click="sort('task_name')">Task Name</th>
+                                            <th class="sorting" @click="sort('begin_date')">Begin Date</th>
+                                            <th class="sorting" @click="sort('end_date')">End Date</th>
+                                            <th class="sorting" @click="sort('description')">Description</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(data, index) in pagingData" :key="index">
-                                            <td>{{data.project_name}}</td>
-                                            <td>{{formatProjectType(data.type)}}</td>
-                                            <td>{{displayDateFormat(data.date_start)}}</td>
-                                            <td>{{displayDateFormat(data.date_end)}}</td>
-                                            <td>{{data.staff_name}}</td>
-                                            <td>{{data.discription}}</td>
+                                            <td>{{data.task_name}}</td>
+                                            <td>{{displayDateFormat(data.begin_date)}}</td>
+                                            <td>{{displayDateFormat(data.end_date)}}</td>
+                                            <td>{{data.description}}</td>
                                             <td>
-                                                <router-link class="edit-button" :to="{name:'ProjectEdit', params: {id: data.project_cd}}"><i class="material-icons">mode_edit</i></router-link>
+                                                <router-link class="edit-button" :to="{name:'TaskEdit', params: {taskData: data}}"><i class="material-icons">mode_edit</i></router-link>
                                                 <i data-type="confirm" class="waves-effect material-icons detele" @click="showModal(data)">delete</i>
-                                                <router-link class="edit-button" :to="{name:'TaskList', params: {project_cd: data.project_cd}}"><i class="material-icons forward">send</i></router-link>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -68,14 +63,17 @@
                                 </div>
                               </div>
                             </div>
+                            <div>
+                              <router-link class="btn btn-primary m-t-15 waves-effect" id="btnBackToProjectList" :to="{name:'ProjectList'}">Back</router-link>
+                            </div>
                         </div>
                   </div>
                 <!-- #END# Task Info -->
             </div>
           </div>
-          <modal v-show="isModalVisible" @accept="deleteProject" @close="closeModal">
+          <modal v-show="isModalVisible" @accept="deleteTask" @close="closeModal">
             <div slot="body" style="margin-left: 10px;">
-              Do you want to delete project "{{delProject.project_name}}"?
+              Do you want to delete project "{{delTask.task_name}}"?
             </div>
           </modal>
     </div>
@@ -92,14 +90,25 @@ import moment from 'moment'
 export default {
   data () {
     return {
+      project_data: {
+        project_cd: "",
+        project_name: "",
+        project_type: "",
+        date_start: "",
+        date_end: "",
+        created_by: "",
+        discription: "",
+        staff_name:""
+      },
+      id: '',
       searchQuery: '',
       myData: [],
-      currentSort: 'project_name',
+      currentSort: 'task_name',
       currentSortDir: 'asc',
       pageSize: 10,
       pageSizeList: [5, 10, 25, 50, 100],
       currentPage: 1,
-      delProject: {},
+      delTask: {},
       isModalVisible: false
     }
   },
@@ -107,8 +116,10 @@ export default {
     Paginator,
     Modal
   },
-  created: function () {
-    this.getProjectList()
+  created () {
+    this.getProjectData();
+    this.getTaskList();
+    this.id = this.$route.params.project_cd;
   },
   methods: {
     sort: function (s) {
@@ -125,10 +136,27 @@ export default {
     loadPage: function (selected, data) {
       this.currentPage = selected
     },
-    getProjectList: function () {
-      axios({
-        method: 'GET',
-        url: 'http://localhost:8085/getProjectList'
+    getProjectData: function (){
+            axios.get(process.env.BASE_URL +"getProjectById", {
+            params: {
+            id: this.$route.params.project_cd
+            }
+        })
+        .then(response => {
+          this.project_data = response.data[0];
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .then(function() {
+            // always executed
+        });
+    },
+    getTaskList: function () {
+      axios.get(process.env.BASE_URL +"getTaskList", {
+            params: {
+            id: this.$route.params.project_cd
+            }
       }).then(
         result => {
           this.myData = result.data
@@ -138,13 +166,13 @@ export default {
         }
       )
     },
-    deleteProject: function () {
+    deleteTask: function () {
       axios({
         method: 'POST',
-        url: 'http://localhost:8085/deleteProject',
-        data: {'project_cd': this.delProject.project_cd}
+        url: process.env.BASE_URL +"deleteTask",
+        data: {'task_cd': this.delTask.task_cd}
       }).then((response) => {
-        this.myData.splice(this.myData.indexOf(this.delProject), 1)
+        this.myData.splice(this.myData.indexOf(this.delTask), 1)
         this.closeModal()
       }).catch(e => {
         console.log(e)
@@ -152,7 +180,7 @@ export default {
     },
     showModal: function (data) {
       console.log(data);
-      this.delProject = data
+      this.delTask = data
       this.isModalVisible = true
     },
     closeModal: function () {
@@ -160,46 +188,11 @@ export default {
     },
     displayDateFormat(valueDate){
         return moment(valueDate).format('DD/MM/YYYY')
-    },
-    formatProjectType(typeValue){
-      var result = "";
-        switch(typeValue){
-          case 1:
-            return result = "WinForm"
-            break;
-          case 2:
-            return result = "WebForm"
-            break;
-          case 3:
-            return result = "Web Application"
-            break;
-          case 4:
-            return result = "Mobile Application"
-            break;
-        }
-    }
+    },        
   },
   computed: {
     displayData: function () {
       var customData = this.myData.slice()
-      // customData.forEach(data => {
-      //   switch (data.type) {
-      //     case 1:
-      //       data.dev_lang_cd_display = 'WinForm'
-      //       break;
-      //     case 2:
-      //       data.dev_lang_cd_display = 'WebForm'
-      //       break;
-      //     case 3:
-      //       data.dev_lang_cd_display = 'Web Application'
-      //       break;
-      //     case 4:
-      //       data.dev_lang_cd_display = 'Mobile Application'
-      //       break;
-      //     default:
-      //       break;
-      //   }
-      // })
       return customData.sort((a, b) => {
         let modifier = 1
         if (this.currentSortDir === 'desc') {
@@ -218,12 +211,10 @@ export default {
         }
         if (this.searchQuery) {
           var lowerSearch = this.searchQuery.toLowerCase()
-          if ((row.project_name && row.project_name.toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.project_cd && row.project_cd.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.date_start && row.date_start.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.date_end && row.date_end.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.staff_name && row.staff_name.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
-              (row.discription && row.discription.toString().toLowerCase().indexOf(lowerSearch) > -1)){
+          if ((row.task_name && row.task_name.toLowerCase().indexOf(lowerSearch) > -1) ||
+              (row.begin_date && row.begin_date.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
+              (row.end_date && row.end_date.toString().toLowerCase().indexOf(lowerSearch) > -1) ||
+              (row.description && row.description.toString().toLowerCase().indexOf(lowerSearch) > -1)){
             return true
           }
         }
@@ -242,6 +233,7 @@ export default {
       return Math.ceil(this.displayData.length / this.pageSize)
     }
   }
+
 }
 </script>
 <style scoped>
