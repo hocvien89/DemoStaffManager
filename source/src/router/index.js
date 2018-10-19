@@ -8,6 +8,8 @@ import ViewReportYear from '@/components/pages/ReportYear'
 import ViewReportLanguage from '@/components/pages/ReportLanguage'
 import ReportStaffByTime from '@/components/pages/ReportStaffByTime'
 import ProjectRegister from '@/components/pages/ProjectRegister'
+import ProjectDetail from '@/components/pages/ProjectDetail'
+import ScreenDetail from '@/components/pages/ScreenDetail'
 import ProjectList from '@/components/pages/ProjectList'
 import ProjectEdit from '@/components/pages/ProjectEdit'
 
@@ -59,6 +61,16 @@ export default new Router({
       path: '/project-list',
       name: 'ProjectList',
       component: ProjectList
+    },
+    {
+      path: '/project-detail/:id',
+      name: 'ProjectDetail',
+      component: ProjectDetail
+    },
+    {
+      path: '/screen-detail/:id',
+      name: 'ScreenDetail',
+      component: ScreenDetail
     },
     {
       path: '/project-edit/:id',

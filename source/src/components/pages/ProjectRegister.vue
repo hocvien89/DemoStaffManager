@@ -117,7 +117,7 @@
 /* eslint-disable */
 import axios from "axios"
 import pic from "../../../node_modules/adminbsb-materialdesign/images/thumbs-up.png"
-import moment from 'moment'
+// import moment from 'moment'
 export default {
   data: function() {
     return {
@@ -205,6 +205,7 @@ export default {
          $('select').val('');
          this.input = [];
           this.dataBackEnd = [];
+           this.submitted = false;
         $('.form-control').blur();
         //this.$refs.projectName.focus();
         $('#projectName').focus();
@@ -228,7 +229,7 @@ export default {
 <style scoped>
     .form-control:focus{
         border-color: red;/*rgba(3, 169, 244, 0.5);*/
-    },
+    }
     .datepicker:focus{
         border-color: gray;
     }
