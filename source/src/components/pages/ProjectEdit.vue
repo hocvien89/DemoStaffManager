@@ -146,12 +146,42 @@ export default {
     };
   },
    mounted(){
-    $('.datepicker').bootstrapMaterialDatePicker({
+        // $("#dateStart").bootstrapMaterialDatePicker().on(
+     	// 	"changeDate", () => {this.input.date_start = $('#dateStart').val()}
+        // );
+        //  $("#dateEnd").bootstrapMaterialDatePicker().on(
+     	// 	"changeDate", () => {this.input.date_start = $('#dateEnd').val()}
+		// );
+
+        // $('#date-start').bootstrapMaterialDatePicker({ weekStart : 0 }).on('change', function(e, date)
+        // {
+        // $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
+        // });
+
+
+    $('#dateStart').bootstrapMaterialDatePicker({
         format: 'DD-MM-YYYY',
         clearButton: true,
         weekStart: 1,
         time: false
-    });
+    }).on('change', () => {this.input.date_start = $('#dateStart').val()}
+    );
+
+    $('#dateEnd').bootstrapMaterialDatePicker({
+        format: 'DD-MM-YYYY',
+        clearButton: true,
+        weekStart: 1,
+        time: false
+    }).on('change',() => {this.input.date_end = $('#dateEnd').val()}
+    );
+    // $('#dateEnd').bootstrapMaterialDatePicker({
+    //     format: 'DD-MM-YYYY',
+    //     clearButton: true,
+    //     weekStart: 1,
+    //     time: false
+    // }).on('change',function(){
+    //     this.input.date_end = $('#dateEnd').val();
+    // });
   },
   created() {
     //$('#projectName').focus();

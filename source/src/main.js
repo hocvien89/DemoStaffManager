@@ -27,6 +27,8 @@ import '../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.mi
 import '../node_modules/moment/moment.js'
 import '../node_modules/adminbsb-materialdesign/js/pages/forms/basic-form-elements.js'
 import '../node_modules/adminbsb-materialdesign/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js'
+import '../node_modules/adminbsb-materialdesign/plugins/jquery-validation/jquery.validate.js'
+
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 Vue.use(VeeValidate)
