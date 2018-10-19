@@ -12,6 +12,9 @@ import ProjectDetail from '@/components/pages/ProjectDetail'
 import ScreenDetail from '@/components/pages/ScreenDetail'
 import ProjectList from '@/components/pages/ProjectList'
 import ProjectEdit from '@/components/pages/ProjectEdit'
+import TaskList from '@/components/pages/TaskList'
+import TaskRegister from '@/components/pages/TaskRegister'
+import TaskEdit from '@/components/pages/TaskEdit'
 
 Vue.use(Router)
 
@@ -76,6 +79,21 @@ export default new Router({
       path: '/project-edit/:id',
       name: 'ProjectEdit',
       component: ProjectEdit
+    },
+    {
+      path: '/task-list',
+      name: 'TaskList',
+      component: TaskList
+    },
+    {
+      path: '/task-register',
+      name: 'TaskRegister',
+      component: TaskRegister
+    },
+    {
+      path: '/task-edit',
+      name: 'TaskEdit',
+      component: TaskEdit
     }
   ]
 })

@@ -79,6 +79,18 @@
                                 <router-link class="toggled" to="/project-list">Project List</router-link>
                             </li>
                           </ul>
+                          <!-- <a class="menu-toggle" @click="toggleMenu">
+                              <i class="material-icons">group</i>
+                              <span>Task</span>
+                          </a>
+                          <ul class="ml-menu" id="task-menu" :style="{'display':isExpand.indexOf('task-menu') > -1 ? 'block' : 'none'}">
+                            <li id="task-register" :class="{'active':isActive == 'task-register'}" @click="setActive">
+                                <router-link class="toggled" to="/task-register">Task Register</router-link>
+                            </li>
+                            <li id="task-list" :class="{'active':isActive == 'task-list'}" @click="setActive">
+                                <router-link class="toggled" to="/task-list">Task List</router-link>
+                            </li>
+                          </ul> -->
                         </li>
                     </ul>
                 </div>
