@@ -210,7 +210,8 @@ export default {
         headers: { "content-type": "application/json" }
       }).then(
         result => {
-          if (result.success) {
+            console.log(result.data);
+          if (result.data.success) {
             alert("Update success.");
           } else {
             alert("Update failure.");
