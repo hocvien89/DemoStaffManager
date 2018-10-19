@@ -10,6 +10,8 @@ import ReportStaffByTime from '@/components/pages/ReportStaffByTime'
 import ProjectRegister from '@/components/pages/ProjectRegister'
 import ViewProjectList from '@/components/pages/ViewProjectList'
 import EditProject from '@/components/pages/EditProject'
+import ProjectDetail from '@/components/pages/ProjectDetail'
+import ScreenDetail from '@/components/pages/ScreenDetail'
 
 Vue.use(Router)
 
@@ -64,6 +66,16 @@ export default new Router({
       path: '/edit-project/:id',
       name: 'EditProject',
       component: EditProject
+    },
+    {
+      path: '/project-detail/:id',
+      name: 'ProjectDetail',
+      component: ProjectDetail
+    },
+    {
+      path: '/screen-detail/:id',
+      name: 'ScreenDetail',
+      component: ScreenDetail
     }
   ]
 })

@@ -261,17 +261,17 @@ app.post('/editProject', function (req, res, next) {
     var param = req.body;
     return new Promise((resolve, reject) => {
         new sql.ConnectionPool(config).connect().then(pool => {
+            console.log(param)
             return pool.request()
                 .input('project_cd', sql.Int, param.project_cd)
                 .input('project_name', sql.NVarChar, param.project_name)
                 .input('type', sql.Int, param.type)
                 .input('discription', sql.NVarChar, param.discription)
-                .input('date_start', sql.Date, param.date_start)
-                .input('date_end', sql.Date, param.date_end)
-                .input('upd_user', sql.Int, param.upd_user)
+                .input('date_start', param.date_start)
+                .input('date_end', param.date_end)
+                .input('ins_user', sql.Int, param.ins_user)
                 .execute('[dbo].[proc_EditProject]')
         }).then(result => {
-
             res.send(result.recordset);
 
             sql.close();
@@ -325,6 +325,139 @@ app.get('/getProjectById', function (req, res) {
         });
     });
 });
+
+app.get('/getListScreenByProjectId', function (req, res) {
+    var project_cd = req.query.id;
+    console.log(project_cd);
+    if (project_cd === undefined) return res.send("error");
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().input('project_cd', sql.Int, project_cd).execute('proc_GetListProjectScreenByProjectId')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+            res.send("error");
+            reject(err)
+            sql.close();
+        });
+    });
+});
+
+app.post('/addScreen', function (req, res, next) {
+    var param = req.body;
+    console.log(param.project_name);
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('screen_name', sql.VarChar, param.screen_name)
+                .input('screen_code', sql.VarChar, param.screen_code)
+                .input('description', sql.NVarChar, param.description)
+                .input('project_cd', sql.Int, param.project_cd)
+                .input('ins_user', sql.Int, param.ins_user)
+                .execute('proc_InsertProjectScreen')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+
+            reject(err)
+            sql.close();
+        });
+    });
+    res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+app.post('/editScreen', function (req, res, next) {
+    var param = req.body;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('screen_cd', sql.Int, param.screen_cd)
+                .input('screen_code', sql.VarChar, param.screen_code)
+                .input('screen_name', sql.VarChar, param.screen_name)
+                .input('description', sql.NVarChar, param.description)
+                .input('upd_user', sql.Int, param.upd_user)
+                .input('status_cd', sql.Int, param.status_cd)
+                .execute('[dbo].[proc_EditProjectScreen]')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+            res.send({ success: false, message: 'error'});
+            reject(err)
+            sql.close();
+        });
+    });
+    res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+
+app.post('/deleteScreen', function (req, res, next) {
+    var param = req.body;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request()
+                .input('screen_cd', sql.Int, param.screen_cd)
+                .execute('[dbo].[proc_DeleteProjectScreen]')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+            res.send({ success: false, message: 'error'});
+            reject(err)
+            sql.close();
+        });
+    });
+    res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+app.get('/getScreenById', function (req, res) {
+    var screen_cd = req.query.id;
+    if (screen_cd === undefined) return res.send("error");
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().input('screen_cd', sql.Int, screen_cd).execute('proc_GetProjectScreenById')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+            res.send("error");
+            reject(err)
+            sql.close();
+        });
+    });
+});
+
+app.get('/GetDetailScreenById', function (req, res) {
+    var screen_cd = req.query.id;
+    if (screen_cd === undefined) return res.send("error");
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().input('screen_cd', sql.Int, screen_cd).execute('proc_GetDetailScreenById')
+        }).then(result => {
+
+            res.send(result.recordset);
+
+            sql.close();
+        }).catch(err => {
+            res.send("error");
+            reject(err)
+            sql.close();
+        });
+    });
+});
+
 
 
 var server = app.listen(8085, function () {
