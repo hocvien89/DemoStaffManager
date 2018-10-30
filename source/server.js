@@ -326,6 +326,8 @@ app.post('/taskRegister', function (req, res, next) {
                 .input('begin_date', param.begin_date)
                 .input('end_date', param.end_date)
                 .input('project_cd', sql.Int, param.project_cd)
+                .input('status_cd', sql.Int, param.status)
+                .input('employee_cd', sql.Int, param.employee_cd)
                 .execute('proc_InsertTask')
         }).then(result => {
             res.send(result.recordset);
@@ -360,7 +362,6 @@ app.post('/deleteTask', function (req, res, next) {
             return pool.request()
                 .input('task_cd', sql.Int, param.task_cd)
                 .query("UPDATE [dbo].[tasks] SET is_delete = 1 WHERE task_cd=@task_cd")
-                //.execute('proc_DeleteTask')
         }).then(result => {
             res.send(result.recordset);
             sql.close();
@@ -371,6 +372,20 @@ app.post('/deleteTask', function (req, res, next) {
         });
     });
      res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+app.get('/getTaskData',function(req, res, next){
+    var task_cd = req.query.task_cd;
+    return new Promise((resolve, reject) => {
+        new sql.ConnectionPool(config).connect().then(pool => {
+            return pool.request().input('task_cd', sql.Int, task_cd).query("Select * from [dbo].[tasks] where task_cd = @task_cd")
+        }).then(result => {
+            res.send(result.recordset);
+            sql.close();
+        }).catch(err => {
+            reject(err)
+            sql.close();
+        });
+    });
 })
 
 app.post('/updateTask', function (req, res, next) {
@@ -383,7 +398,9 @@ app.post('/updateTask', function (req, res, next) {
                 .input('description', sql.NVarChar, param.description)
                 .input('begin_date', param.begin_date)
                 .input('end_date', param.end_date)
-                .query("UPDATE [dbo].[tasks] SET task_name = @task_name, description = @description, begin_date = @begin_date, end_date = @end_date, upd_date = GETDATE() WHERE task_cd=@task_cd")
+                .input('employee_cd',sql.Int, param.employee_cd)
+                .input('status_cd',sql.Int, param.status_cd)
+                .query("UPDATE [dbo].[tasks] SET task_name = @task_name, description = @description, begin_date = @begin_date, end_date = @end_date, upd_date = GETDATE(), employee_cd = @employee_cd, status_cd = @status_cd WHERE task_cd=@task_cd")
         }).then(result => {
             res.send(result.recordset);
             sql.close();
@@ -393,7 +410,39 @@ app.post('/updateTask', function (req, res, next) {
             sql.close();
         });
     });
-    res.status(200).send({ success: true, message: 'Thành công', data: param });
+    //res.status(200).send({ success: true, message: 'Thành công', data: param });
+})
+
+app.get('/getTimeWorking', function(req, res, next){
+    if (req.query.task_cd){
+        var task_cd = req.query.task_cd;
+        var employee_cd = req.query.employee_cd;
+        return new Promise((resolve, reject) => {
+            new sql.ConnectionPool(config).connect().then(pool => {
+                return pool.request().input('task_cd', sql.Int, task_cd).input('employee_cd', sql.Int, employee_cd).query("Select begin_date, end_date from [dbo].[tasks] where employee_cd = @employee_cd and status_cd <> 3 and is_delete is null and task_cd <> @task_cd")
+            }).then(result => {
+                res.send(result.recordset);
+                sql.close();
+            }).catch(err => {
+                reject(err)
+                sql.close();
+            });
+        });
+    }
+    else{
+        var employee_cd = req.query.employee_cd;
+        return new Promise((resolve, reject) => {
+            new sql.ConnectionPool(config).connect().then(pool => {
+                return pool.request().input('task_cd', sql.Int, task_cd).input('employee_cd', sql.Int, employee_cd).query("Select begin_date, end_date from [dbo].[tasks] where employee_cd = @employee_cd and is_delete is null and status_cd <> 3")
+            }).then(result => {
+                res.send(result.recordset);
+                sql.close();
+            }).catch(err => {
+                reject(err)
+                sql.close();
+            });
+        });
+    }
 })
 
 

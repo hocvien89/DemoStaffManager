@@ -69,7 +69,7 @@ export default new Router({
       component: ProjectEdit
     },
     {
-      path: '/task-list',
+      path: '/task-list/:project_cd',
       name: 'TaskList',
       component: TaskList
     },
@@ -79,7 +79,7 @@ export default new Router({
       component: TaskRegister
     },
     {
-      path: '/task-edit',
+      path: '/task-edit/:task_cd',
       name: 'TaskEdit',
       component: TaskEdit
     }

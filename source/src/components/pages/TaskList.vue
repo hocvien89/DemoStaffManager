@@ -28,6 +28,8 @@
                                             <th class="sorting" @click="sort('begin_date')">Begin Date</th>
                                             <th class="sorting" @click="sort('end_date')">End Date</th>
                                             <th class="sorting" @click="sort('description')">Description</th>
+                                            <th class="sorting" @click="sort('assignee')">Assignee</th>
+                                            <th class="sorting" @click="sort('status')">Status</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -37,8 +39,13 @@
                                             <td>{{displayDateFormat(data.begin_date)}}</td>
                                             <td>{{displayDateFormat(data.end_date)}}</td>
                                             <td>{{data.description}}</td>
+                                            <td>{{data.staff_name}}</td>
+                                            <td v-if="data.status_cd === 1">Pending</td>
+                                            <td v-else-if="data.status_cd === 2">Executing</td>
+                                            <td v-else-if="data.status_cd === 3">Done</td>
+                                            <td v-else-if="data.status_cd === 4">Fix Bug</td>
                                             <td>
-                                                <router-link class="edit-button" :to="{name:'TaskEdit', params: {taskData: data}}"><i class="material-icons">mode_edit</i></router-link>
+                                                <router-link class="edit-button" :to="{name:'TaskEdit', params: {task_cd: data.task_cd}}"><i class="material-icons">mode_edit</i></router-link>
                                                 <i data-type="confirm" class="waves-effect material-icons detele" @click="showModal(data)">delete</i>
                                             </td>
                                         </tr>
@@ -119,7 +126,6 @@ export default {
   created () {
     this.getProjectData();
     this.getTaskList();
-    this.id = this.$route.params.project_cd;
   },
   methods: {
     sort: function (s) {

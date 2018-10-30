@@ -61,10 +61,45 @@
                             </div>
                         </div>
                         <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                <label for="txtCreatBy">Assignee</label>
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select class="form-control show-tick" id="employeeCode" name="Assignee" v-validate="'required'"  v-model="dataInput.employee_cd" v-bind:class="{'form-control': true, 'error': errors.has('Assignee') }">
+                                            <option value="0">-- Select employee to do the task --</option>
+                                            <option v-for="(item, index) in listEmployee" :key="index" v-bind:value="item.staff_cd">{{item.staff_name}}</option>
+                                        </select>
+                                    </div>
+                                    <span v-show="errors.has('Assignee')" class="text-danger">{{ errors.first('Assignee') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                <label for="txtLang">Status</label>
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select class="form-control show-tick" id="status" v-validate="'required'" placeholder="Choose project type" v-model="dataInput.status_cd" name="status" :class="{'form-control': true, 'error': errors.has('status')}">
+                                            <option value="0">-- Update status--</option>
+                                            <option value="1">Pending</option>
+                                            <option value="2">Excuting</option>
+                                            <option value="3">Done</option>
+                                            <option value="4">Fix bug</option>
+                                        </select>
+                                    </div>
+                                     <span v-show="errors.has('status')" class="text-danger">{{ errors.first('status') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
                             <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
                                 <button type="button" class="btn btn-primary m-t-15 waves-effect" v-on:click="onSubmit()">save</button>
                                 <button type="button" class="btn btn-primary m-t-15 waves-effect" v-on:click="formatForm()">Clear</button>
-                                <router-link class="btn btn-primary m-t-15 waves-effect" :to="{name:'TaskList', params: {project_cd: this.$route.params.taskData.project_cd}}">Cancel</router-link>
+                                <router-link class="btn btn-primary m-t-15 waves-effect" :to="{name:'TaskList', params: {project_cd: this.dataInput.project_cd}}">Cancel</router-link>
                            </div>
                         </div>
                     </form>
@@ -76,107 +111,206 @@
 </template>
 <script>
 /* eslint-disable */
-import axios from "axios"
-import pic from "../../../node_modules/adminbsb-materialdesign/images/thumbs-up.png"
-import moment from 'moment'
+import axios from "axios";
+import pic from "../../../node_modules/adminbsb-materialdesign/images/thumbs-up.png";
+import moment from "moment";
 export default {
   data: function() {
     return {
-        dataToUpdate:{
-            task_cd:'',
-            task_name:'',
-            description:'',
-            begin_date:'',
-            end_date:'',
-        },
-        dataInput:{
-            task_name:'',
-            description:'',
-            begin_date:'',
-            end_date:'',
-        },
-        listTask:[],
-        submitted: false
-    }
+      dataToUpdate: {
+        task_cd: "",
+        task_name: "",
+        description: "",
+        begin_date: "",
+        end_date: "",
+        employee_cd: "",
+        status_cd: ""
+      },
+      dataInput: {
+        project_cd: "",
+        task_name: "",
+        description: "",
+        begin_date: "",
+        end_date: "",
+        employee_cd: "",
+        status_cd: ""
+      },
+      listEmployee: [],
+      listTimeWorking: [],
+      submitted: false
+    };
   },
   created() {
-      this.dataInput.task_name = this.$route.params.taskData.task_name;
-      this.dataInput.description = this.$route.params.taskData.description;
-      this.dataInput.begin_date = moment(this.$route.params.taskData.begin_date).format('DD/MM/YYYY');
-      this.dataInput.end_date = moment(this.$route.params.taskData.end_date).format('DD/MM/YYYY');
+    this.getEmployeeList();
+    this.getTaskData();
   },
-   mounted(){
-        $('#beginDate').bootstrapMaterialDatePicker({
-            format: 'DD-MM-YYYY',
-            clearButton: true,
-            weekStart: 1,
-            time: false
-            }).on('change', () => {this.dataInput.begin_date = $('#beginDate').val()}
-        );
-        $('#endDate').bootstrapMaterialDatePicker({
-            format: 'DD-MM-YYYY',
-            clearButton: true,
-            weekStart: 1,
-            time: false
-            }).on('change', () => {this.dataInput.end_date = $('#endDate').val()}
-        );
+  mounted() {
+    $("#beginDate")
+      .bootstrapMaterialDatePicker({
+        format: "DD/MM/YYYY",
+        clearButton: true,
+        weekStart: 1,
+        time: false
+      })
+      .on("change", () => {
+        this.dataInput.begin_date = $("#beginDate").val();
+      });
+    $("#endDate")
+      .bootstrapMaterialDatePicker({
+        format: "DD/MM/YYYY",
+        clearButton: true,
+        weekStart: 1,
+        time: false
+      })
+      .on("change", () => {
+        this.dataInput.end_date = $("#endDate").val();
+      });
   },
   methods: {
-     formatForm(){
-        $('input').val('');
-        $('select').val('');
-        this.input = [];
-        this.dataBackEnd = [];
-        $('.form-control').blur();
-        $('#taskName').focus();
-     },
-     updateEndInput(){
-        this.dataInput.end_date = $("#beginDate").val();
-        console.log(this.dataInput.end_date);
-     },
-     onSubmit(e){
-        this.submitted = true;
-        this.dataToUpdate.task_cd = this.$route.params.taskData.task_cd;
-        this.dataToUpdate.task_name = $('#taskName').val();
-        this.dataToUpdate.description = $('#description').val();
-        this.dataToUpdate.begin_date = this.formatDateBackEnd($("#beginDate").val());
-        this.dataToUpdate.end_date =  this.formatDateBackEnd($("#endDate").val());
-
+    getEmployeeList() {
+      axios({
+        method: "GET",
+        url: process.env.BASE_URL + "getEmployeeList"
+      }).then(
+        result => {
+          this.listEmployee = result.data;
+        },
+        error => {
+          console.error(error);
+        }
+      );
+    },
+    getTaskData() {
+      axios
+        .get(process.env.BASE_URL + "getTaskData", {
+          params: {
+            task_cd: this.$route.params.task_cd
+          }
+        })
+        .then(
+          result => {
+            this.dataInput = result.data[0];
+            this.dataInput.begin_date = moment(
+              this.dataInput.begin_date
+            ).format("DD/MM/YYYY");
+            this.dataInput.end_date = moment(this.dataInput.end_date).format(
+              "DD/MM/YYYY"
+            );
+            this.getTimeWorking();
+          },
+          error => {
+            console.error(error);
+          }
+        );
+    },
+    getTimeWorking() {
+      axios
+        .get(process.env.BASE_URL + "getTimeWorking", {
+          params: {
+            task_cd: this.$route.params.task_cd,
+            employee_cd: this.dataInput.employee_cd
+          }
+        })
+        .then(
+          result => {
+            this.listTimeWorking = result.data;
+          },
+          error => {
+            console.error(error);
+          }
+        );
+    },
+    checkOverlappingTime() {
+      for (let i = 0; i < this.listTimeWorking.length; i++) {
+        if (
+          (moment(this.dataInput.begin_date).format("DD/MM/YYYY") >=
+            moment(this.listTimeWorking[i].begin_date).format("DD/MM/YYYY") &&
+            moment(this.dataInput.begin_date).format("DD/MM/YYYY") <=
+              moment(this.listTimeWorking[i].end_date).format("DD/MM/YYYY")) ||
+          (moment(this.dataInput.end_date).format("DD/MM/YYYY") >=
+            moment(this.listTimeWorking[i].begin_date).format("DD/MM/YYYY") &&
+            moment(this.dataInput.end_date).format("DD/MM/YYYY") <=
+              moment(this.listTimeWorking[i].end_date).format("DD/MM/YYYY")) ||
+          (moment(this.dataInput.begin_date).format("DD/MM/YYYY") <=
+            moment(this.listTimeWorking[i].begin_date).format("DD/MM/YYYY") &&
+            moment(this.dataInput.end_date).format("DD/MM/YYYY") >=
+              moment(this.listTimeWorking[i].end_date).format("DD/MM/YYYY"))
+        ) {
+          return false;
+        }
+      }
+      return true;
+    },
+    formatForm() {
+      $("input").val("");
+      $("select").val("");
+      this.input = [];
+      this.dataBackEnd = [];
+      $(".form-control").blur();
+      $("#taskName").focus();
+    },
+    onSubmit(e) {
+      this.submitted = true;
+      this.dataToUpdate.task_cd = this.dataInput.task_cd;
+      this.dataToUpdate.task_name = this.dataInput.task_name;
+      this.dataToUpdate.description = this.dataInput.description;
+      this.dataToUpdate.begin_date = moment(
+        this.dataInput.begin_date,
+        "DD/MM/YYYY"
+      ).format("MM/DD/YYYY");
+      this.dataToUpdate.end_date = moment(
+        this.dataInput.end_date,
+        "DD/MM/YYYY"
+      ).format("MM/DD/YYYY");
+      this.dataToUpdate.employee_cd = this.dataInput.employee_cd;
+      this.dataToUpdate.status_cd = this.dataInput.status_cd;
+      if (this.checkOverlappingTime()) {
         this.$validator.validate().then(valid => {
-            if (valid) {
-                axios({
-                    method: "POST",
-                    url: process.env.BASE_URL +"updateTask",
-                    data: this.dataToUpdate,
-                    headers: { "content-type": "application/json" }
-                }).then(
-                    result => {
-                        swal({
-                            title: "Success!",
-                            text: "The task is update successfully",
-                            type: "success"
-                        });
-                        this.formatForm();
-                        this.$router.push({name: 'TaskList', params: {project_cd: this.$route.params.taskData.project_cd }});
-                    },
-                    error => {
-                        swal("Oops!", "Error! An error occurred. Please try again later", "error");
-                    }
+          if (valid) {
+            axios({
+              method: "POST",
+              url: process.env.BASE_URL + "updateTask",
+              data: this.dataToUpdate,
+              headers: { "content-type": "application/json" }
+            }).then(
+              result => {
+                console.log(result);
+                swal({
+                  title: "Success!",
+                  text: "The task is update successfully",
+                  type: "success"
+                });
+                this.formatForm();
+                this.$router.push({
+                  name: "TaskList",
+                  params: { project_cd: this.dataInput.project_cd }
+                });
+              },
+              error => {
+                swal(
+                  "Oops!",
+                  "Error! An error occurred. Please try again later",
+                  "error"
                 );
-            }
+              }
+            );
+          }
         });
-     },
-     formatDateBackEnd(dateValue){
-        return moment(dateValue,'DD/MM/YYYY').format('MM/DD/YYYY');
-     }
+      } else {
+        swal("Oops!", "This user had a task in this period of time", "error");
+      }
+    },
+    formatDateBackEnd(dateValue) {
+      return moment(dateValue, "DD/MM/YYYY").format("MM/DD/YYYY");
+    }
   }
 };
 </script>
 <style scoped>
-    .form-control:focus{
-        border-color: red;/*rgba(3, 169, 244, 0.5);*/
-    }
-    .datepicker:focus{
-        border-color: gray;
-    }
+.form-control:focus {
+  border-color: red; /*rgba(3, 169, 244, 0.5);*/
+}
+.datepicker:focus {
+  border-color: gray;
+}
 </style>
