@@ -45,6 +45,7 @@
                                                 <router-link class="edit-button" :to="{name:'ProjectEdit', params: {id: data.project_cd}}"><i class="material-icons">mode_edit</i></router-link>
                                                 <i data-type="confirm" class="waves-effect material-icons detele" @click="showModal(data)">delete</i>
                                                 <router-link class="edit-button" :to="{name:'TaskList', params: {project_cd: data.project_cd}}"><i class="material-icons forward">send</i></router-link>
+                                                <router-link :to="{name:'ProjectDetail', params:{id: data.project_cd}}" style="color:black"><i class="material-icons">details</i></router-link>
                                             </td>
                                         </tr>
                                     </tbody>
